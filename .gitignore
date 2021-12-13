@@ -1,0 +1,11 @@
+# phpstorm project files
+.idea
+vendor/
+config/db.php
+assets/
+runtime/
+controllers/StudentController-.php
+js/jquery.validate.js
+models/FeeDiscounts - with_fk_fee_particular_id.php
+models/FeeHeadWise -with-fk_particular_id relation.php
+uploads/

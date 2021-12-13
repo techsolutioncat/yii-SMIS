@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 17.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="284.769px" height="144.809px" viewBox="0 0 284.769 144.809" enable-background="new 0 0 284.769 144.809"
+	 xml:space="preserve">
+<g id="XMLID_7749_">
+	<circle id="XMLID_7754_" fill="#6DD8A0" cx="202.058" cy="71.947" r="71.947"/>
+	<g id="XMLID_7750_">
+		<g>
+			<defs>
+				<circle id="SVGID_1_" cx="202.058" cy="71.947" r="71.947"/>
+			</defs>
+			<clipPath id="SVGID_2_">
+				<use xlink:href="#SVGID_1_"  overflow="visible"/>
+			</clipPath>
+			
+				<polygon id="XMLID_7753_" clip-path="url(#SVGID_2_)" fill="#0CCAFE" stroke="#FFFFFF" stroke-width="2" stroke-miterlimit="10" points="
+				202.058,76.179 94.762,112.835 95.621,-20.314 202.058,-20.314 			"/>
+		</g>
+		<g>
+			<defs>
+				<circle id="SVGID_3_" cx="202.058" cy="71.947" r="71.947"/>
+			</defs>
+			<clipPath id="SVGID_4_">
+				<use xlink:href="#SVGID_3_"  overflow="visible"/>
+			</clipPath>
+			
+				<polygon id="XMLID_7752_" clip-path="url(#SVGID_4_)" fill="#FFAB81" stroke="#FFFFFF" stroke-width="2" stroke-miterlimit="10" points="
+				202.058,171.825 95.621,171.825 114.029,105.804 202.058,75.332 			"/>
+		</g>
+	</g>
+</g>
+<g id="XMLID_7746_">
+	<text transform="matrix(1 0 0 1 14.4517 42.3408)" fill="#8C8C8C" font-family="'Lato-Regular'" font-size="12">Recieved</text>
+</g>
+<g id="XMLID_7743_">
+	<text transform="matrix(1 0 0 1 14.4514 82.6272)" fill="#8C8C8C" font-family="'Lato-Regular'" font-size="12">Pending</text>
+</g>
+<g id="XMLID_7740_">
+	<text transform="matrix(1 0 0 1 14.4517 121.3074)" fill="#8C8C8C" font-family="'Lato-Regular'" font-size="12">Arrears</text>
+</g>
+<g id="XMLID_7737_">
+	<text transform="matrix(1 0 0 1 14.4512 137.8284)" fill="#2E3C54" font-family="'Lato-Regular'" font-size="13">12,000</text>
+</g>
+<g id="XMLID_7734_">
+	<text transform="matrix(1 0 0 1 14.4512 98.9582)" fill="#2E3C54" font-family="'Lato-Regular'" font-size="13">2,000</text>
+</g>
+<g id="XMLID_7731_">
+	<text transform="matrix(1 0 0 1 14.4514 59.0884)" fill="#2E3C54" font-family="'Lato-Regular'" font-size="13">6,000</text>
+</g>
+<rect id="XMLID_7730_" x="0" y="34.626" fill="#0CCAFE" width="7.321" height="7.321"/>
+<rect id="XMLID_7729_" x="0" y="74.916" fill="#FFAB81" width="7.321" height="7.321"/>
+<rect id="XMLID_7728_" x="0" y="112.468" fill="#6DD8A0" width="7.321" height="7.321"/>
+</svg>

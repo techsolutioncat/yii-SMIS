@@ -1,0 +1,141 @@
+/*
+Style: Responsive
+site: MIS
+*/
+/*Tabs, Ipad Start*/
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+}
+/*Mobile Start*/
+@media only screen and (max-device-width: 767px) {
+/*General*/	
+.pad {
+    padding: 5px 10px;
+} 
+header .navbar-header:before {
+    content: none;
+}	
+header .navbar-header{
+    min-height: 52px;
+}
+/*Dropdown menu*/
+.nav_inn.nav li.dropdown > .dropdown-menu{
+	position: static;
+    white-space: normal;
+    background: none;
+    padding-bottom: 25px;
+    min-height: inherit;
+    opacity: 1 !important;
+    display: none !important;
+}
+.header-in ul.nav_inn.navbar-nav > li {
+    position: relative;
+}
+.nav_inn.nav li.dropdown > .dropdown-menu li a > span {
+	display:none;
+}
+.header-in .dropdown-menu li {
+    width: 100%;
+    text-align: left;
+    padding-left: 15px;
+}
+.header-in .dropdown-menu li > a {
+    min-height: inherit;
+    color: #ddd;
+    padding: 5px 5px;
+    width: 100%;
+    max-width: 100%;
+    text-align: left;
+}
+.nav_inn.nav li.dropdown.open .dropdown-menu {
+    display: inline-block !important;
+    box-shadow: none;
+    background-color: #212e47;
+}
+.header-in .navbar-nav {
+    margin: 0;
+	padding-bottom: 60px;
+}
+.header-in,
+.header-in .container, .header-in .navbar-collapse {
+    margin: 0;
+	padding: 0;
+}
+.header-in ul.nav_inn.navbar-nav > li.setting-opt,
+.header-in ul.nav_inn.navbar-nav > li.signout-opt{
+	min-width: 100%;
+    text-align: center;
+	margin-top:10px;
+	margin-bottom:20px;
+	float:left;
+}
+.header-in ul.nav_inn.navbar-nav > li.setting-opt a,
+.header-in ul.nav_inn.navbar-nav > li.signout-opt > form > button{
+	width: 100%;
+	background-color: #6dd8a0;
+    color: #212e47;
+}
+.header-in ul.nav_inn.navbar-nav > li.signout-opt{
+	margin-bottom:0;
+	position: absolute;
+    bottom: 20px;
+}
+.search {
+    max-width: 210px;
+}
+.search input[type="text"] {
+    min-width: 100%;
+}
+.filters_head .form-group select.form-control {
+    max-width: 100%;
+}
+.filters_head .fh_item {
+    padding: 0px 10px 10px 10px;
+}
+.action-head a.btn.green-btn {
+    position: static;
+    margin-bottom: 10px;
+}
+.action-head {
+    position: static;
+}
+.rep_graphs {
+    position: static;
+    width: 100%;
+    text-align: center;
+}
+
+
+
+
+/*Dashboard*/
+.main-pallet, .main-pallet .col-sm-3, .db-wrapper-inn  .col-md-3  {
+    padding: 0;
+}
+.btn-head {
+    position: static;
+}
+.content_col {
+    padding-top: 5px;
+}
+
+
+
+	
+
+/*End Mobile 767*/
+}

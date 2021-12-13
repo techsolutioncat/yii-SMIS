@@ -1,0 +1,77 @@
+
+#img_span{
+margin-top:-10px;
+width: 1100px;
+height:250px;
+margin-left:-10px;
+
+}
+
+table{
+
+width:950px;
+margin-left:2%;
+border-collapse: separate;
+border-spacing: 1px;
+
+}
+
+th, tr, td  {
+border:1px solid #4B8D79;
+padding:3px;
+font-size:3.5em;
+}
+
+tr:nth-child(even){background-color: #f2f2f2}
+
+#h3_custom{
+margin-top:-40px;
+float:right; 
+color:#39538A;
+font-size:23px;
+text-align:center;
+
+}
+#header{
+    text-align: center !important;
+}
+#stud_details{
+padding:5px;
+
+background-color: #4B8D79;
+font-size:19px;
+font-weight:bold;
+
+}
+
+#listing{
+cell-padding:1;
+cell-spacing:1;
+}
+
+#centered{
+margin-left:200px !important;
+margin-top:80px;
+color:#39538A;
+font-size:19px;
+width:800px;
+
+}
+
+#footer_table{
+border:0;
+margin-top:0px;
+}
+
+
+
+#dmc_footer{
+margin-top:0px;
+
+font-size:19px;
+font-weight:bold;
+text-align:center;
+border:0px !important;
+}
+
+ 

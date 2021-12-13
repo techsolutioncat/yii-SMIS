@@ -1,0 +1,51 @@
+body{ font-family: sans-serif;}
+.none{ display:none;}
+.dropdown{color: #444444;font-size:17px;} 
+
+.grey{ background-color:#DDDDDD !important;}
+.light_sky{ background-color:#B9FFFF !important;}
+
+/*========== Hover Popup ===============*/
+.date_cell { cursor: pointer; cursor: hand; }
+.date_cell:hover { background: #DDDDDD !important; }
+.date_popup_wrap {
+	position: absolute;
+	width: 143px;
+	height: 115px;
+	z-index: 9999;
+	top: -115px;
+	left:-55px;
+	background: transparent url(add-new-event.png) no-repeat top left;
+	color: #666 !important;
+}
+.events_window {
+	overflow: hidden;
+	overflow-y: auto;
+	width: 133px;
+	height: 115px;
+	margin-top: 28px;
+	margin-left: 25px;
+}
+.event_wrap {
+	margin-bottom: 10px; padding-bottom: 10px;
+	border-bottom: solid 1px #E4E4E7;
+	font-size: 12px;
+	padding: 3px;
+}
+.date_window {
+	margin-top:20px;
+	margin-bottom: 2px;
+	padding: 5px;
+	font-size: 16px;
+	margin-left:9px;
+	margin-right:14px
+}
+.popup_event {
+	margin-bottom: 2px;
+	padding: 2px;
+	font-size: 16px;
+	width:100%;
+}
+.popup_event a {color: #000000 !important;}
+.packeg_box a {color: #F58220;float: right;}
+a:hover {color: #181919;text-decoration: underline;}

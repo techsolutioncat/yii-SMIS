@@ -1,0 +1,85 @@
+.col-12{
+    width:100%;
+}
+.col-99{
+    width:99%;
+}
+.col-4{
+    width:33.33%;
+}
+.col-3{
+    width: 25%;
+}
+.col-8{
+    width: 66.66666667%;;
+}
+.col-9{
+    width: 75%;
+}
+.col-6{
+    width: 50%;
+}
+.left{
+    float:left;
+}
+.right{
+    float:right;
+}
+.sd_pdf_col{
+    display: inline-flex;
+}
+.pdf_dm-thumb{
+    padding-left: 30px;
+}
+
+.dmc_head span {
+    padding-right: 30px;
+}
+
+.table {
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 20px;
+}
+
+thead {
+   /* display: table-header-group;
+    vertical-align: middle;
+    border-color: inherit;*/
+
+}
+thead{
+    background-color: red !important;
+}
+
+
+tr:nth-child(even){background-color: #f2f2f2}
+tr {
+    display: table-row;
+    vertical-align: inherit;
+    border-color: inherit;
+}
+th, tr, td  {
+    padding: 8px;
+    line-height: 1.42857143;
+    vertical-align: top;
+   /* border-top: 1px solid #ddd;*/
+}
+
+.pdf-dmc-head{
+    display: inline-block;
+}
+
+.table-dmc tfoot tr > th.tt_l {
+    text-align: right;
+    background: #6dd8a0;
+}
+
+.table-dmc tfoot tr > th.tt_pls {
+    background: #2e3c54;
+}
+
+.table-dmc tfoot tr > th.tt_prcnt {
+    background: #404040;
+}
+ 
