@@ -34,7 +34,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute'=>'fk_city_id',
                 'label'=>'City',
                 'value'     => function($data){
-                    return ucfirst($data->fkCity->city_name);
+                    return (!empty($data->fkCity->city_name))? ucfirst($data->fkCity->city_name): '';
                 }
             ],
             [

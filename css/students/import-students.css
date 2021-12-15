@@ -1,0 +1,80 @@
+form#upload-form {
+    display: flex;
+    justify-content: center;
+    padding: 30px 0px;
+}
+
+form#upload-form .field-uploadexcelform-file{
+    display: flex;
+    text-align: center;
+    align-items: center;
+    position: relative;
+}
+
+.wrap .help-block{
+    position: absolute;
+    bottom: -15px !important;
+}
+
+
+/* page loading css */
+.wrap{
+    position: relative;
+}
+.container-wrap{
+    padding: 0px !important;
+    top: 0;
+}
+.loading {
+    position: fixed;
+    margin: auto;
+    width: 100%;
+    height: 100%;
+    animation: backGround 5s ease infinite;
+    z-index: 1;
+}
+.loading .loadingWrapper {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.loading .loadingWrapper #loading {
+    margin: auto;
+    height: 100px;
+    width: 100px;
+    border: transparent;
+    border-top: 3px solid #6dd8a0;
+    border-radius: 50%;
+    animation: round 2s linear infinite;
+}
+.loading .loadingWrapper h1 {
+    color: #6dd8a0;
+    position: relative;
+    margin: auto;
+    top: 50%;
+}
+@keyframes round {
+    from {
+        transform: rotate(0deg);
+   }
+    to {
+        transform: rotate(360deg);
+   }
+}
+@keyframes backGround {
+    0% {
+        background-color: #555;
+   }
+    50% {
+        background-color: #444;
+   }
+    75% {
+        background-color: #333;
+   }
+    100% {
+        background-color: #111;
+   }
+}
+/* page loading css */
+

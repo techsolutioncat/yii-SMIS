@@ -49,14 +49,15 @@ if($student->gender_type = 1){
         </div>
     </div>
     <div class="col-sm-6 sd_col">
-        <a class="sd_print" href="<?=Url::to(['exams/student-dmc',
+        <?php /*Url::to(['exams/student-dmc',
             'exam_id'    => $exam_details->id,
             'stu_id'     => $student->stu_id,
             'class_id'   => $student->class_id,
             'group_id'   => ($student->group_id)?$student->group_id:null,
             'section_id' => $student->section_id,
             'position'=> (isset($position))?$position:'N/A'
-        ]);?>"><img src="<?= Url::to('@web/img/print.png') ?>" alt="print <?=ucfirst(Yii::$app->common->getName($student->user_id))?> DMC"></a>
+        ]);*/?>
+        <!-- <a class="sd_print btn-print-pdf" href="Javascript:;"><img src="<?= Url::to('@web/img/print.png') ?>" alt="print <?=ucfirst(Yii::$app->common->getName($student->user_id))?> DMC"></a> -->
         <div class="col-sm-4 sd-thumb">
             <div class="sdt_in">
               <img src="<?= $web_path.$imageName?>" alt="<?=ucfirst(Yii::$app->common->getName($student->user_id))?>">

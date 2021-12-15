@@ -28,6 +28,7 @@ use kartik\depdrop\DepDrop;
 $this->registerCssFile(Yii::getAlias('@web')."/css/wizard/normalize.css");
 $this->registerCssFile(Yii::getAlias('@web')."/css/wizard/main.css");
 $this->registerCssFile(Yii::getAlias('@web')."/css/wizard/jquery.steps.css");
+$this->registerJsFile(Yii::getAlias('@web').'/js/students/html2pdf.bundle.min.js',['depends' => [yii\web\JqueryAsset::className()]]);
 $this->registerJsFile(Yii::getAlias('@web').'/js/jquery.steps.js',['depends' => [yii\web\JqueryAsset::className()]]);
 $this->registerJsFile(Yii::getAlias('@web').'/js/custom-step.js',['depends' => [yii\web\JqueryAsset::className()]]);
 $this->registerJsFile(Yii::getAlias('@web').'/js/previewstudent.js',['depends' => [yii\web\JqueryAsset::className()]]);

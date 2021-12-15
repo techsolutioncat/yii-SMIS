@@ -2612,29 +2612,50 @@ $(document).on('click','#feemodxx',function(){
 $(document).on('click','#feeheadxx',function(){
         var rows=$("#feeheads").val();
         var url=$("#feeheads").data('url');
-        var branch=$('.branch_input').val();
+        var branch=$('#wizard-p-1 .branch_input').val();
         var status=$("#statuscreateheads").val();
-        //alert(rows);
+        var feeHdeadNum = $("#feeheads").val();
+        var feeHeads = $('#wizard-p-3 .feeHeads');
+        var feeModes = $('#wizard-p-3 .fee_modes');
 
         $.ajax
         ({
-            type: "POST",
-            dataType:'JSON',
-            data: {rows:rows,branch:branch},
             url: url,
+            type: "POST",
+            dataType:'json',
+            data: {rows:rows,branch:branch},
             cache: false,
+            async: false,
             success: function(result)
-            {
-                //console.log(result.branch)
-                
+            {       
+                feeHdeadNum = parseInt(feeHdeadNum);
+                let innerHTML = '';
 
-                if(status == 'create'){
-                    $(".feeHeads").html(result.views);
-                    $(".fee_modes").html(result.branch);
-                }else{
-                        $(".feeHeads").append(result.views);
-                         $(".fee_modes").append(result.branch);
+                if(feeHdeadNum > 0)
+                {
+                    for(let i = 0; i < feeHdeadNum; i++)
+                    {
+                        innerHTML += '<div>';
+                        innerHTML += '<div class="row">';
+                        innerHTML += '<div class="col-md-6">';
+                        innerHTML += '<br>';
+                        innerHTML += '<input type="text" name="feeheads-title[]" class="form-control headss">';
+                        innerHTML += '</div><br>';
+                        innerHTML += '<div class="col-md-6">';
+                        innerHTML += '<select class="form-control fee_modes" name="FeeHeads[fk_fee_method_id]['+ i +']">';
+                        innerHTML += result.branch;
+                        innerHTML += '</select>';
+                        innerHTML += '</div>';
+                        innerHTML += '</div>';
+                        innerHTML += '</div>';
+
+                    }
                 }
+                   
+                if(status == 'create')
+                    feeHeads.html(innerHTML);
+                else
+                    feeHeads.append(innerHTML);
                 //$(".fee_modes").append($("<option></option>").val(3).html("Three"));
             } 
         });

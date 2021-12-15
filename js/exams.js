@@ -85,7 +85,8 @@ $(document).on('click','#search-exam-dmc',function () {
                         var exportUrl = $('.exportdmcs').data('url');
 
                         var dataUrl = exportUrl+"?class_id="+classId+"&group_id="+groupId+"&section_id="+sectionId+"&exam_id="+examType;
-                        $('.exportdmcs').html('<a class="btn green-btn" href="'+dataUrl+'" >Export & Print All DMC\'S</a>');
+                        // $('.exportdmcs').html('<a class="btn green-btn" href="'+dataUrl+'" >Export & Print All DMC\'S</a>');
+                        $('.exportdmcs').html('<a class="btn green-btn btn-print-pdf" href="Javascript:;" >Export & Print All DMC\'S</a>');
                         $('.exportdmcs').show();
                         $('.export-classwise-resultsheet').hide();
                         $('ul.std-exam-list li a').first()[0].click();
@@ -100,6 +101,7 @@ $(document).on('click','#search-exam-dmc',function () {
 
                         $('.exportdmcs').hide();
                     }
+
                     $('#modal-type').modal('hide');
                 }else{
                     $("#"+result.tabId).html(result.html);

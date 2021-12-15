@@ -113,12 +113,24 @@ class BranchController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $model2 = new RefClass();
+        $FeePaymentMode = new FeePaymentMode();
+        $FeeHeads = new FeeHeads();
+        $settings = new Settings();
+        $FeeGroup = new FeeGroup();
+        $FeePlanType = new FeePlanType();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('update', [
                 'model' => $model,
+                'model2'  =>$model2,
+                'FeePaymentMode'  =>$FeePaymentMode,
+                'FeeHeads'  =>$FeeHeads,
+                'settings'  =>$settings,
+                'FeeGroup'  =>$FeeGroup,
+                'FeePlanType'  =>$FeePlanType,
             ]);
         }
     }
@@ -176,7 +188,7 @@ class BranchController extends Controller
         }
 
         $views=$this->renderAjax('get-fee-heads',['rows'=>$rows]);
-        return json_encode(['views'=>$views,'branch'=>$brnch]);
+        echo json_encode(['views'=>$views,'branch'=>$brnch]);
     }
 
       
@@ -204,7 +216,6 @@ class BranchController extends Controller
     }
 
     public function actionCreateBranch(){
-
         if(Yii::$app->request->post()){
             //echo '<pre>';print_r($_POST);die;
             // echo $branch_id= $_POST['Branch']['branch_name'];

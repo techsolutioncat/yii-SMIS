@@ -321,26 +321,27 @@ class ExamsController extends Controller
         if(Yii::$app->user->isGuest){
             return $this->goHome();
         }else{
-            if(Yii::$app->request->isAjax){
+            if(Yii::$app->request->isAjax)
+            {
                 $examModel = new Exam();
                 $data= Yii::$app->request->post();
-//                print_r($data);exit;
+                // print_r($data);exit;
                 $class_id = $data['class_id'];
                 $group_id = $data['group_id'];
                 $section_id = $data['section_id'];
 
-            $query = RefClass::find()->select([
-                'ref_class.title as `class_name`',
-                'ref_class.class_id as `class_id`',
-                'g.group_id as `group_id`',
-                'g.title as `group_name`',
-                's.section_id as `section_id`',
-                's.title as `section_name`',
-                'sb.id as `subject_id`',
-                'sb.title as `subject_name`',
-                'sd.id as `sub_div_id`',
-                'sd.title as `sub_div_title`'
-            ])
+                $query = RefClass::find()->select([
+                    'ref_class.title as `class_name`',
+                    'ref_class.class_id as `class_id`',
+                    'g.group_id as `group_id`',
+                    'g.title as `group_name`',
+                    's.section_id as `section_id`',
+                    's.title as `section_name`',
+                    'sb.id as `subject_id`',
+                    'sb.title as `subject_name`',
+                    'sd.id as `sub_div_id`',
+                    'sd.title as `sub_div_title`'
+                ])
                 ->leftJoin('ref_group g', 'g.fk_class_id = ref_class.class_id')
                 ->leftJoin('ref_section s', 's.class_id = ref_class.class_id')
                 ->innerJoin('subjects sb', 'sb.fk_class_id = ref_class.class_id')
@@ -350,7 +351,7 @@ class ExamsController extends Controller
                     'g.group_id'=>($group_id)?$group_id:null,
                     's.section_id'=>($section_id)?$section_id:null
                 ]);
-               $model= $query->createCommand()->queryAll();
+                $model= $query->createCommand()->queryAll();
                 $details = $this->renderAjax('_ajax/get-subjects-data',['dataprovider'=>$model,'model'=>$examModel]);
                 return json_encode(['status'=>1 ,'details'=>$details]);
             }
@@ -1027,8 +1028,7 @@ class ExamsController extends Controller
                 'position'=>$total_marks_subjects,
                 'total_count'=>count($class_data)
             ]);
-        }
-        else{
+        }else{
             if(Yii::$app->request->get()){
                 $data= Yii::$app->request->get();
                 $student = Yii::$app->common->getStudent($data['stu_id']);

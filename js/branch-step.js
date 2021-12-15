@@ -34,7 +34,6 @@
             /*============ end of 2nd step ans start of 3rd ==*/
             
             var firstplanInput=$('.mode').val();
-            alert(firstplanInput);
             if(firstplanInput == undefined){}else{
             $("#feePlanCreate").show(); 
             $("#feemodeLabel").hide();
@@ -117,7 +116,7 @@
                 }
                 if(province ==''){
                     $('.bprovince').text('province Cannot Be Blank');
-                    //stepOneError++;
+                    stepOneError++;
                 }else{
                     $('.bprovince').text('');
                 }
@@ -129,7 +128,7 @@
                 }
                  if(city ==''){
                     $('.bcity').text('City Cannot Be Blank');
-                   // stepOneError++;
+                   stepOneError++;
                 }else{
                     $('.bcity').text('');
                 }
@@ -145,13 +144,13 @@
                     stepOneError++;
                 }
 
-
                 else{
                     $('.bemail').text('');
                     $('#branch-form').ajaxSubmit({
                         url: url,
                         type: 'post',
                         dataType:"JSON",
+                        async: false,
                         beforeSend: function(){
                             $("div.modal-content").append("<div id='overLayDiv'><div style='top: 50%;left: 50%;margin-right: auto;margin-bottom: auto;position: absolute;'><span style='color:#1FA4EA; font-size:20px; font-weight:bold; padding-left:5px;'><i class='fa fa-refresh fa-spin'></i></span></div></div>");
                             $("#overLayDiv").css({
@@ -167,8 +166,8 @@
                         },
                         success: function(data) {
                             if(data.status == 1){
-                                $('.branch_input').val(data.branch_id);
-                                $('#existsBranch').html(data.branch_id);
+                                $('#wizard-p-1 .branch_input').val(data.branch_id);
+                                //$('#existsBranch').html(data.branch_id);
                             }
 
                         }
@@ -558,11 +557,11 @@
                     stepOneError++;
                 }*/
                 if(fee ==''){
-                    $('#fees').text('Theme Cannot Be Blank');
+                    $('#fees').text('Fee Due Date Cannot Be Blank');
                     settingserror++;
                 }
                 if(theme ==''){
-                    $('#themeerror').text('Theme Cannot Be Blank');
+                    $('#themeerror').text('Theme Color Cannot Be Blank');
                     settingserror++;
                 }
                 else{

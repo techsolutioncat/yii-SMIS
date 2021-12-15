@@ -350,7 +350,7 @@ $this->registerCss("
                         <div class="row">
         <div class="col-md-6">
      <label id="feeheadsLabel">Number Of Fee Heads To Add:</label>
-     <input type="text" name="row" class="form-control" id="feeheads" data-url=<?php echo Url::to(['branch/fee-heads'])?> />
+     <input type="number" name="row" class="form-control" id="feeheads" data-url=<?php echo Url::to(['branch/fee-heads'])?> />
         </div>
          <br />
     <div style="height: 10px"></div>
@@ -555,8 +555,8 @@ $classArray = ArrayHelper::map(\app\models\RefClass::find()->where(['fk_branch_i
                     $day = $settings->fee_due_date;
                     echo 'Due Date : '.date($day.'-m-Y');
                 } ?></span>
-                </div>
                 <label id="fees" style="color: red"></label>
+                </div>
         
         <div class="col-md-6">
             <?=$form->field($settings, 'school_time_in')->textInput(['class'=>'alarm form-control','id'=>'val']); ?>

@@ -42,6 +42,10 @@ use yii\filters\VerbFilter;
 use yii\web\UploadedFile;
 use yii\data\ActiveDataProvider;
 use app\models\FeePaymentMode;
+use arogachev\excel\import\basic\Importer; // for excel
+use PHPExcel;
+use PHPExcel_IOFactory;
+use app\models\UploadExcelForm;
 use mPDF;
 
 /**
@@ -1875,8 +1879,7 @@ class StudentController extends Controller {
 
                         return json_encode(['status' => 1, 'details' => $details]);
                     } else {
-                        return json_encode(['status' => 1, 'details' => '<div class="alert alert-warning">
-  <strong>Note!</strong>Record Not Found.</div>']);
+                        return json_encode(['status' => 1, 'details' => '<div class="alert alert-warning"><strong>Note!</strong>Record Not Found.</div>']);
                     }
                 } else {
                     /* geting data on pagination. */
@@ -2496,8 +2499,7 @@ class StudentController extends Controller {
 
                         return json_encode(['status' => 1, 'details' => $details]);
                     } else {
-                        return json_encode(['status' => 1, 'details' => '<div class="alert alert-warning">
-  <strong>Note!</strong>Record Not Found.</div>']);
+                        return json_encode(['status' => 1, 'details' => '<div class="alert alert-warning"><strong>Note!</strong>Record Not Found.</div>']);
                     }
                 } else {
                     /* geting data on pagination. */
@@ -2598,7 +2600,113 @@ class StudentController extends Controller {
             }
         }
     }
+    
+    // Import Strudents Data From Excel
+    public function actionImportStudents()
+    {
+        $model = new UploadExcelForm();
+        if (Yii::$app->request->isPost) {
+            $model->file = UploadedFile::getInstance($model,'file');
+            //      if ($model->upload()) {
+            //        print <<<EOT
+            //< script > alert ('upload succeeded ') < / script >
+            //EOT;
+            //      } else {
+            //        print <<<EOT
+            //< script > alert ('upload failed ') < / script >
+            //EOT;
+            //}
+            if (!$model->upload()) {
+                print "< script > alert ('upload failed ') < / script >";
+            }   
+        }
 
+        $ok = 0;
+        // print_r($model->load(Yii::$app->request->post()));exit;
+        if ($model->load(Yii::$app->request->post())) {
+            $file = UploadedFile::getInstance($model,'file');
+
+            if ($file) {
+                $tmp_file = date('YmdHis') . '.' . $file->extension; // $file->name;
+                $path = 'uploads/excel/';
+                $filename = $path . $tmp_file;
+                $file->saveAs($filename);
+
+                if (in_array($file->extension,array('xls','xlsx'))) {
+                    $fileType = PHPExcel_IOFactory::identify($filename); // the filenamee automatically determines the type
+                    $ExcelReader = PHPExcel_IOFactory::createReader($fileType);
+
+                    $phpexcel = $ExcelReader->Load($filename)->getsheet(0); // load the file and get the first sheet
+                    $total_line = $phpexcel->gethighestrow(); // total number of rows
+                    $total_column = $phpexcel->gethighestcolumn(); // total number of columns
+
+                    if (1 < $total_line) {
+                        for ($row = 2;$row <= $total_line;$row++) {
+                            $data = [];
+
+                            for ($column = 'A';$column <= $total_column;$column++) {
+                                $arr = trim($phpexcel->getCell($column.$row));
+                                array_push($data, $arr);
+                            }
+                            //INSERT user
+                            //user table fields: (first_name, last_name, middle_name, username, password, status, fk_role_id);
+                            //user table data: (data[1], data[2], '', data[0], @moment2016, active, 3);
+                            $password='@moment2016';
+                            $password_hash = Yii::$app->security->generatePasswordHash($password);
+                            $val= array($data[1], $data[2], '', $data[0], $password_hash, 'active', 3, date('Y-m-d H:i:s'));
+                            $set = array('first_name', 'last_name', 'middle_name', 'username', 'password_hash', 'status', 'fk_role_id', 'created_at');
+                            $where = array();
+                            foreach ($set as $i => $key) {
+                                $where[$key] = $val[$i];
+                            }
+
+                            $info = Yii::$app->db->createCommand()->insert('user', $where)->execute();
+                            $user_id = Yii::$app->db->getLastInsertID();
+
+                            // INSERT student_info
+                            $set = array('user_id', 'fk_branch_id', 'dob', 'shift_id', 'religion_id', 'class_id', 'section_id', 'location1', 'is_active', 'registration_date');
+                            $reg_date = strtotime($data[10]);
+                            $dob = strtotime($data[9]);
+                            $val = array($user_id, 1, date('Y-m-d H:i:s', $dob), 3, 1, $data[7],  $data[8], $data[12], 1, date('Y-m-d H:i:s', $reg_date));
+                            $where = array();
+                            foreach ($set as $i => $key) {
+                                $where[$key] = $val[$i];
+                            }
+
+                            $info = Yii::$app->db->createCommand()->insert('student_info', $where)->execute();
+                            $std_id = Yii::$app->db->getLastInsertID();
+
+                            // INSERT student_parents_info
+                            $set = array('first_name', 'cnic', 'profession', 'contact_no', 'stu_id');
+                            $val = array($data[3], $data[4], 1, $data[11], $std_id);
+                            $where = array();
+                            foreach ($set as $i => $key) {
+                                $where[$key] = $val[$i];
+                            }
+
+                            $info = Yii::$app->db->createCommand()->insert('student_parents_info', $where)->execute();
+                            $std_paid = Yii::$app->db->getLastInsertID();
+
+                            if ($info) {
+                                $ok = 1;
+                            }
+                        }
+                    }
+
+                                    
+                    if(file_exists($filename))
+                        unlink($filename);
+
+                    if ($ok == 1) {
+                        return $this->redirect('import-students');
+                    } else {
+                        Echo "< script > alert ('operation failed '); window.history.back ();</script>";
+                    }
+                }
+            }
+        } else {
+            return $this->render('import-students',['model' => $model]);
+        }
+    }
 }
-
 // end of main class

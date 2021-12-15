@@ -17,14 +17,18 @@ if (!Yii::$app->user->isGuest) {
             <div class="row">
                 <div class="header-top pad">
                     <div class="logo">
-                        <?php echo Html::a(Html::img('@web' . $logo), ['/site/index'], ['alt' => Yii::$app->common->getBranchDetail()->name . ' -logo']); ?>
+                        <?php 
+                            if( !empty(Yii::$app->common->getBranchDetail()) ){
+                                echo Html::a(Html::img('@web' . $logo), ['/site/index'], ['alt' => Yii::$app->common->getBranchDetail()->name . ' -logo']); 
+                            }
+                        ?>
                     </div>
                     <div class="search">
                         <div class="form-group">
                             <input type="text"
-                                   placeholder="Search <?= ucfirst(Yii::$app->common->getBranchDetail()->name) ?>">
+                                   placeholder="Search <?php echo ( !empty(Yii::$app->common->getBranchDetail()) )? ucfirst(Yii::$app->common->getBranchDetail()->name): ""; ?>">
                             <img src="<?= Url::to('@web/img/search.svg') ?>"
-                                 alt="<?= Yii::$app->common->getBranchDetail()->name . '-search' ?>">
+                                 alt="<?php echo ( !empty(Yii::$app->common->getBranchDetail()) )? Yii::$app->common->getBranchDetail()->name . '-search': ""; ?>">
                         </div>
                     </div>
                     <div class="head-right">
@@ -170,6 +174,7 @@ if (!Yii::$app->user->isGuest) {
                                                     ['label' => '<span><img src="' . Url::to('@web/img/st5.svg') . '" /></span> ' . Yii::t('app', 'Shuffle Students'), 'url' => ['/student/shuffle-students']],
                                                     ['label' => '<span><img src="' . Url::to('@web/img/st2.svg') . '" /></span> ' . Yii::t('app', 'Sundry Account'), 'url' => ['/sundry-account']],
                                                     ['label' => '<span><img src="' . Url::to('@web/img/st3.svg') . '" /></span> ' . Yii::t('app', 'Student Account'), 'url' => ['/update-account']],
+                                                    ['label' => '<span><img src="' . Url::to('@web/img/st3.svg') . '" /></span> ' . Yii::t('app', 'Import Students'), 'url' => ['/student/import-students']],
                                                 /* ['label' => '<span><img src="'.Url::to('@web/img/st6.svg').'" /></span> Student Profile','url' => ['/student/profile']], */
                                                 ],
                                             ],
