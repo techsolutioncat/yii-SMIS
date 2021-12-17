@@ -660,7 +660,6 @@ foreach ($attendance_array as $key=>$attendance_details){
     $attenance_data['total'][]= $attendance_details['total'];
 
 }
-
 $this->registerJS("$('ul.exams-list li a').last()[0].click();", \yii\web\View::POS_LOAD);
 $this->registerJS(" 
     var attendance_details = ".json_encode($attenance_data,JSON_NUMERIC_CHECK).";

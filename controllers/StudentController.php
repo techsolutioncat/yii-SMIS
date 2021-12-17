@@ -2072,12 +2072,10 @@ class StudentController extends Controller {
                     $exam_array = \yii\helpers\ArrayHelper::map($query, 'id', 'title');
 
                     /* student Attendance */
-
                     $attendance_query = StudentAttendance::find()->select(['count(*) as total', 'leave_type'])
                                     ->where(['fk_stu_id' => $student_id])
-                                    ->andWhere(['between', 'date(date)', $start_date, date('Y-m-d')])
+                                    ->andWhere(['between', 'date', $start_date, date('Y-m-d H:i:s')])
                                     ->groupBy('leave_type')->asArray()->all();
-
 
 
                     /* FEE DATA COLLECTION */
@@ -2123,7 +2121,6 @@ class StudentController extends Controller {
                                     ->innerJoin('ref_class rc', 'rc.class_id=fg.fk_class_id')
                                     ->leftJoin('ref_group rg', 'rg.group_id=fg.fk_group_id')
                                     ->where(['fg.is_active' => 'yes', 'rc.class_id' => $class_id, 'rg.group_id' => ($group_id) ? $group_id : null])->asArray()->all();
-
                     foreach ($query_fee as $items) {
                         if ($items['no_months'] == 1) {
                             $amount = $items['amount'] * $items['no_months'];
@@ -2170,7 +2167,6 @@ class StudentController extends Controller {
                         ['name' => "Total Received", 'data' => $total_payment_received],
                         ['name' => "Total Arrears", 'data' => $arrears]
                     ];
-
 
                     return $this->render('profile', [
                                 'model' => $model,
@@ -2333,7 +2329,6 @@ class StudentController extends Controller {
                         $attenance_data['total'][] = $attendance_details['total'];
                     }
                     $array = $attenance_data;
-
                     return json_encode([
                         'attenance_data' => $array,
                         'start_date' => $data['start_date'],

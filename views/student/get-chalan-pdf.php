@@ -29,7 +29,7 @@ $this->registerCss("
 <h2>Preview</h2>
 <div>
     <img src="<?= Url::to('@web/img/pre1.svg') ?>" alt="MIS" style="float: right">
-    <div style="width: 100%; border-top: 1px solid #6dd8a0; border-bottom: 1px solid #6dd8a0">
+    <div style="width: 100%; border-top: 1px solid #6dd8a0;">
         <h3>Initial Information</h3>
         <div style="width: 50%; float:left;">
             <table class="table table-striped">
@@ -77,12 +77,10 @@ $this->registerCss("
 </div>
 
 <div>
-    <img src="<?= Url::to('@web/img/pre1.svg') ?>" alt="MIS" style="float: right">
-    <div style="width: 100%; border-bottom: 1px solid #6dd8a0; border-top: 1px solid #6dd8a0">
-        <h3>Education Information</h3>
-    </div>
-    <div style="width: 100%; border-top: 1px solid #6dd8a0; border-bottom: 1px solid #6dd8a0">
-        <div style="width: 50%; float:left; border-top: 1px solid #6dd8a0; border-bottom: 1px solid #6dd8a0">
+    <div style="width: 100%; border-top: 1px solid #6dd8a0;">
+        <img src="<?= Url::to('@web/img/pre1.svg') ?>" alt="MIS" style="float: right">
+        <div style="width: 50%; float:left;">
+            <h3>Education Information</h3>
             <table class="table table-striped">
                 <tbody>
                     <tr>
@@ -105,8 +103,8 @@ $this->registerCss("
 </div>
 
 <div>
-    <img src="<?= Url::to('@web/img/pre2.svg') ?>" alt="MIS" style="float: right">
-    <div style="width: 100%; border-top: 1px solid #6dd8a0; border-bottom: 1px solid #6dd8a0">
+    <div style="width: 100%; border-top: 1px solid #6dd8a0;">
+        <img src="<?= Url::to('@web/img/pre2.svg') ?>" alt="MIS" style="float: right">
         <div style="width: 50%; float:left;">
             <h3>Parents</h3>
             <table class="table table-striped" style="background:none; font-size:13px;">
@@ -142,7 +140,7 @@ $this->registerCss("
 </div>
 
 <div>
-    <img rc="<?= Url::to('@web/img/pre3.svg') ?>" alt="MIS" style="float: right">
+    <img src="<?= Url::to('@web/img/pre3.svg') ?>" alt="MIS" style="float: right">
     <div style="width: 100%; border-top: 1px solid #6dd8a0; border-bottom: 1px solid #6dd8a0">
         <div style="width: 50%; float:left;">
             <h3>Parents Contact</h3>
@@ -184,7 +182,7 @@ $this->registerCss("
 
 <div>
     <img src="<?= Url::to('@web/img/pre4.svg') ?>" alt="MIS" style="float: right">
-    <div style="width: 100%; border-top: 1px solid #6dd8a0; border-bottom: 1px solid #6dd8a0">
+    <div style="width: 100%;">
         <div style="width: 50%; float:left;">
             <h3>Transport Info</h3>
             <table class="table table-striped" style="background:none; font-size:13px;">
@@ -220,8 +218,8 @@ $this->registerCss("
 
 <div>
     <div style="width: 100%; border-top: 1px solid #6dd8a0;">
-        <img src="<?= Url::to('@web/img/pre5.svg') ?>" alt="MIS" style="float: right;margin-top: 5px;">
-        <div class="mis_head col-sm-6" style="border-bottom: 1px solid #6dd8a0; border-top: 1px solid #6dd8a0;">
+        <img src="<?= Url::to('@web/img/pre5.svg') ?>" alt="MIS" style="float: right;margin-bottom: 5px; margin-top: 10px;">
+        <div class="mis_head col-sm-6" style="">
             <h3>Fee</h3>
         </div>
         <div style="width: 100%; background: none;">

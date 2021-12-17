@@ -198,7 +198,7 @@ $(document).on('click','#get-timeline',function () {
 
             }
 
-            // $(".floorAjax").html(html);
+            $(".floorAjax").html(html);
         }
     });
 });
