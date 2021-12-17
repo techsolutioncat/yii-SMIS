@@ -19,6 +19,7 @@ use app\models\Session;
 use app\models\RefGroup;
 use app\models\User;
 use app\models\StudentParentsInfo;
+use app\models\StudentEducationalHistoryInfo;
 use yii\helpers\ArrayHelper;
 use yii\helpers\FileHelper;
 
@@ -131,6 +132,22 @@ class CommonHelper extends Component {
         } else {
             return false;
         }
+    }
+
+    //=========================================================//
+    //                   get parent info                  //
+    //=========================================================//
+    public static function getParentInfo($id) {
+        $one = StudentParentsInfo::find()->where(['stu_id' => $id])->one();
+        return $one;
+    }
+
+    //=========================================================//
+    //                   get student education info                  //
+    //=========================================================//
+    public static function getStudentEducationInfo($id) {
+        $one = StudentEducationalHistoryInfo::find()->where(['stu_id' => $id])->one();
+        return $one;
     }
 
     //=========================================================//

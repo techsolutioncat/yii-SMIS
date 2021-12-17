@@ -826,6 +826,7 @@ function refreshPagination(wizard, options, state)
     {
         var finish = wizard.find(".actions a[href$='#finish']").parent(),
             next = wizard.find(".actions a[href$='#next']").parent();
+            wizard.find(".actions a[href$='#finish']").attr('id', 'exportPDF');
 
         if (!options.forceMoveForward)
         {

@@ -26,7 +26,6 @@ use yii\helpers\Url;
         </ul>
     </div>
 
-    <a class="sd_print btn-print-pdf" id="btn_print_pdf" href="Javascript:;"><img src="<?= Url::to('@web/img/print.png') ?>"></a>
     <div id="exam_content">
         <div class="col-sm-9 fs_content">
 

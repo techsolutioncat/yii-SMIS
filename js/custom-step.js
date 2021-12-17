@@ -920,22 +920,10 @@ $(document).on('change','#hosteldetail-fk_bed_id',function(){
     }
 });
 
-
 $(document).ready(function () {
-    $('form#admission-form').find(".actions a[href$='#finish']").click(function() {
-        alert('sdffd');
-        var element = document.getElementById('wizard-p-6');
-        html2pdf(element, {
-            margin:1,
-            padding:0,
-            filename: 'myfile.pdf',
-            image: { type: 'jpeg', quality: 1 },
-            html2canvas: { scale: 2,  logging: true },
-            jsPDF: { unit: 'in', format: 'A2', orientation: 'P' },
-            class: createPDF
-        });
-    });
+    // $('form#admission-form')find(".actions a[href$='#finish']").click(function() {
+    //     var previewer_data = $('#previeer').html();
+    //     alert('sdfsdf');
+    //     $(this).attr('href', 'Javascript:;');
+    // });
 });
-
-
-

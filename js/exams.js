@@ -42,7 +42,7 @@ $(document).on('click','#search-exam-dmc',function () {
     var classId     = $('#class-id').val();
     var groupId     = $('#group-id').val();
     var sectionId   = $('#section-id').val();
-
+    var position = '';
     var error = 0;
     if(tabId == '#Single-Examination'){
         if(singleDropdown.val()==''){
@@ -80,13 +80,19 @@ $(document).on('click','#search-exam-dmc',function () {
             {
                 if(result.status ==1){
                     var examType = singleDropdown.val();
+                    var position = Array();
                     if(result.tabId =='Single-Examination'){
                         $("#"+result.tabId).html(result.html);
                         var exportUrl = $('.exportdmcs').data('url');
 
-                        var dataUrl = exportUrl+"?class_id="+classId+"&group_id="+groupId+"&section_id="+sectionId+"&exam_id="+examType;
-                        // $('.exportdmcs').html('<a class="btn green-btn" href="'+dataUrl+'" >Export & Print All DMC\'S</a>');
-                        $('.exportdmcs').html('<a class="btn green-btn btn-print-pdf" href="Javascript:;" >Export & Print All DMC\'S</a>');
+                        $('#mCSB_1_container ul.std-exam-list li').each(function() {
+                            var id = ($(this).find('a').data('position') != "")? $(this).find('a').data('position'): 0;
+                            position.push(id);
+                        });
+                        var str_position = JSON.stringify(position);
+
+                        var dataUrl = exportUrl+"?class_id="+classId+"&group_id="+groupId+"&section_id="+sectionId+"&exam_id="+examType+'&position=' + str_position;
+                        $('.exportdmcs').html('<a class="btn green-btn" href="'+dataUrl +'">Export & Print All DMC\'S</a>');
                         $('.exportdmcs').show();
                         $('.export-classwise-resultsheet').hide();
                         $('ul.std-exam-list li a').first()[0].click();
@@ -95,7 +101,12 @@ $(document).on('click','#search-exam-dmc',function () {
                         var arrayParam = {"param1":1,"param2":2};
                         $("#"+result.tabId).empty().html(result.html);
                         var exportUrl = $('.export-classwise-resultsheet').data('url');
-                        var dataUrl = exportUrl+"?fk_class_id="+classId+"&fk_group_id="+groupId+"&fk_section_id="+sectionId+"&fk_exam_type="+examType;
+                        $('#mCSB_1_container ul.std-exam-list li').each(function() {
+                            var id = ($(this).find('a').data('position') != "")? $(this).find('a').data('position'): 0;
+                            position.push(id);
+                        });
+                        var str_position = JSON.stringify(position);
+                        var dataUrl = exportUrl+"?fk_class_id="+classId+"&fk_group_id="+groupId+"&fk_section_id="+sectionId+"&fk_exam_type="+examType +'&position=' +  str_position;
                         $('.export-classwise-resultsheet').html('<a href="'+dataUrl+'"><img src="/mis/img/print.png" alt="print VAN DISEL DMC"></a>');
                         $(".export-classwise-resultsheet a").attr( "params",arrayParam );
 

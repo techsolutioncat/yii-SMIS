@@ -1013,9 +1013,11 @@ class ExamsController extends Controller
             $total_class_subjects =[];
             $total_marks_subjects =[];
             foreach ($class_data as $key=>$total_class){
-                $percentage = $subjects_data[$key]['marks_obtained']/$subjects_data[$key]['total_marks']*100;
-                $total_marks_subjects [] = [round($percentage,2)];
-                $total_class_subjects [] = $total_class['subject'];
+                if(isset($subjects_data[$key])){
+                    $percentage = $subjects_data[$key]['marks_obtained']/$subjects_data[$key]['total_marks']*100;
+                    $total_marks_subjects [] = [round($percentage,2)];
+                    $total_class_subjects [] = $total_class['subject'];
+                }
             }
 
             return json_encode([
@@ -1110,7 +1112,7 @@ class ExamsController extends Controller
                 $class_id = $data['class_id'];
                 $group_id = (isset($data['group_id']))?$data['group_id']:null;
                 $section_id = $data['section_id'];
-
+               
                 /*$student = Yii::$app->common->getStudent($data['stu_id']);*/
                 $branch_details = Yii::$app->common->getBranchDetail();
                 /*exam students*/
@@ -1134,8 +1136,8 @@ class ExamsController extends Controller
                     $this->layout = 'pdf';
                     //$mpdf = new mPDF('', 'A4');
                     $mpdf = new mPDF('','', 0, '', 2, 2, 3, 3, 2, 2, 'A4');
-
-                    foreach($exams_students as $students){
+                    $position = json_decode($data['position']);
+                    foreach($exams_students as $i => $students){
                         $student = Yii::$app->common->getStudent($students['stu_id']);
                         $subjects_data = Exam::find()
                             ->select([
@@ -1171,6 +1173,7 @@ class ExamsController extends Controller
                                     'query' => $subjects_data,
                                     'exam_details' => $examtype,
                                     'branch_details' => $branch_details,
+                                    'position' => $position[$i]
 
                                 ]);
                             }else{
@@ -1179,10 +1182,9 @@ class ExamsController extends Controller
                                     'query' => $subjects_data,
                                     'exam_details' => $examtype,
                                     'branch_details' => $branch_details,
-
+                                    'position' => $position[$i]
                                 ]);
                             }
-                            
                             $mpdf->AddPage();
                             $stylesheet = file_get_contents('css/site.css');
                             $stylesheet .= file_get_contents('css/std-dmc-pdf.css');
@@ -1194,10 +1196,6 @@ class ExamsController extends Controller
                     $mpdf->Output('Result-sheet-'.$resultsheet.'.pdf', 'D');
                     /*$directoryAsset = Yii::$app->assetManager->getPublishedUrl('@webroot/vendor/bower/bootstrap/dist').'/css/bootstrap.css';
                     $dash = explode('/mis/',$directoryAsset);*/
-
-
-
-
                 }
             }
         }

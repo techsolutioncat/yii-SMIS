@@ -1291,7 +1291,7 @@ tr.payment-tr .form-group .form-control {
 .mis_pre img.img-prev {
 	position: absolute;
 	right: 16px;
-	top: 8px;
+	top: -6px;
 	z-index: 9;
 }
 #preview-fee {

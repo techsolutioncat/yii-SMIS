@@ -920,8 +920,8 @@ class StudentController extends Controller {
         $studentHeadDescTyp = Yii::$app->request->post('head_hidden_discount_type');
         $studentHeadAmt = Yii::$app->request->post('head_hidden_amount');
 
-        $stu_fee_heads = unserialize($studentInfoData['student_fee_plan_array']);
-        $stu_total_fee = $studentInfoData['student_fee_total_amount'];
+        $stu_fee_heads = (!empty($studentInfoData['student_fee_plan_array']))? unserialize($studentInfoData['student_fee_plan_array']): array();
+        $stu_total_fee = (!empty($studentInfoData['student_fee_total_amount']))? $studentInfoData['student_fee_total_amount']: array();
         $stu_fee_plan = $studentInfoData['fk_fee_plan_type'];
         $due_date = date('Y-m-' . Yii::$app->common->getBranchSettings()->fee_due_date);
 
@@ -1668,7 +1668,6 @@ class StudentController extends Controller {
                 $group_id = $student_data->group_id;
                 $section_id = $student_data->section_id;
                 $stop_id = $student_data->fk_stop_id;
-
                 $transport_fare = 0;
                 $fee_challan = FeeTransactionDetails::findOne($challan_id);
                 $feecollectionModel = \app\models\FeeCollectionParticular::findOne(['id' => $fee_challan->fk_fee_collection_particular, 'is_active' => 1]);
@@ -1696,7 +1695,45 @@ class StudentController extends Controller {
                                 ->innerJoin('ref_class rc', 'rc.class_id=fg.fk_class_id')
                                 ->leftJoin('ref_group rg', 'rg.group_id=fg.fk_group_id')
                                 ->where(['fg.is_active' => 'yes', 'rc.class_id' => $class_id, 'rg.group_id' => ($group_id) ? $group_id : null])->asArray()->all();
+                
+                    //Get fk_fee_head_id from fk_fee_plan_tpe.
+                    $fee_head = yii::$app->db->createCommand("SELECT c.head_amount, f.title FROM fee_challan_record AS c LEFT JOIN fee_heads AS f ON c.fk_head_id = f.id WHERE c.fk_stu_id=".$student_id)->queryAll();
 
+                    $strQuery = User::find()->select([
+                    'user.id',
+                    'user.first_name',
+                    'user.last_name',
+                    'user.middle_name',
+                    'user.username',
+                    's.cnic',
+                    's.is_hostel_avail',
+                    's.transport_updated',
+                    's.country_id',
+                    's.district_id',
+                    's.gender_type',
+                    's.withdrawl_no',
+                    's.location1',
+                    'c.title AS class_title',
+                    'g.title AS group_title',
+                    'se.title AS section_title',
+                    'shift.title AS shift_title' 
+                    ])
+                    ->leftJoin('student_info AS s', 'user.id = s.user_id') 
+                    ->leftJoin('ref_class AS c', 'c.class_id = s.class_id' )
+                    ->leftJoin('ref_group AS g', 'g.group_id = s.group_id' )
+                    ->leftJoin('ref_section AS se', 'se.section_id = s.section_id' )
+                    ->leftJoin('ref_shift AS shift', 'shift.shift_id = s.shift_id')
+                    ->where(['user.id' => $student_data->user_id])->asArray()->all();
+
+                $parent_info = Yii::$app->common->getParentInfo($student_id);
+                $student_ed_info = Yii::$app->common->getStudentEducationInfo($student_id);
+                $hostel =  yii::$app->db->createCommand("SELECT hostel.Name AS hostel, f.title AS FLOOR, r.title AS room, b.title AS bed, d.create_date AS Allotment FROM hostel_detail AS d LEFT JOIN hostel ON hostel.id = d.fk_hostel_id LEFT JOIN hostel_floor AS f ON f.id = d.fk_floor_id LEFT JOIN hostel_room AS r ON r.id = d.fk_room_id LEFT JOIN hostel_bed AS b ON b.id = d.fk_bed_id WHERE d.fk_student_id=".$student_id)->queryAll();
+
+                $country_id = ($student_data->country_id == "")? 1: $student_data->country_id;
+                $province_id = ($student_data->province_id == "")? 1: $student_data->province_id;
+                $city_id = ($student_data->city_id == "")? 1: $student_data->city_id;
+                $religion_id = ($student_data->religion_id == "")? 1: $student_data->religion_id;
+                $district_id = ($student_data->district_id == "")? 1: $student_data->district_id;
 
                 /* generate PDF of challan */
                 $chalan_html = $this->render('get-chalan-pdf', [
@@ -1708,12 +1745,20 @@ class StudentController extends Controller {
                     'transport_fare' => $transport_fare,
                     'challan_details' => $fee_challan,
                     'cnic_count' => $stuparent_info,
-                    'parent_cnic' => $query_std_plan['cnic']
+                    'parent_cnic' => $query_std_plan['cnic'],
+                    'detail' => $strQuery,
+                    'parent_info' => $parent_info,
+                    'student_ed_info' => $student_ed_info,
+                    'fee_head' => $fee_head,
+                    'country' =>  yii::$app->db->createCommand("SELECT country_name FROM ref_countries WHERE country_id = ".$country_id)->queryAll(),
+                    'province' => yii::$app->db->createCommand("SELECT province_name FROM ref_province WHERE province_id = ".$province_id)->queryAll(),
+                    'city' => yii::$app->db->createCommand("SELECT city_name FROM ref_cities WHERE city_id = ".$city_id)->queryAll(),
+                    'religion' => yii::$app->db->createCommand("SELECT Title FROM ref_religion WHERE religion_type_id = ".$religion_id)->queryAll(),
+                    'District' => yii::$app->db->createCommand("SELECT District_Name FROM ref_district WHERE district_id = ".$district_id)->queryAll()
                 ]);
-
-
+                
                 $this->layout = 'pdf';
-                //$mpdf = new mPDF('', 'A4');
+                $mpdf = new mPDF('', 'A4');
                 $mpdf = new mPDF('', '', 0, '', 2, 2, 3, 3, 2, 2, 'A4');
                 $mpdf->WriteHTML($chalan_html);
                 $mpdf->Output('Student-challan.pdf', 'D');
