@@ -1728,13 +1728,14 @@ class StudentController extends Controller {
                 $parent_info = Yii::$app->common->getParentInfo($student_id);
                 $student_ed_info = Yii::$app->common->getStudentEducationInfo($student_id);
                 $hostel =  yii::$app->db->createCommand("SELECT hostel.Name AS hostel, f.title AS FLOOR, r.title AS room, b.title AS bed, d.create_date AS Allotment FROM hostel_detail AS d LEFT JOIN hostel ON hostel.id = d.fk_hostel_id LEFT JOIN hostel_floor AS f ON f.id = d.fk_floor_id LEFT JOIN hostel_room AS r ON r.id = d.fk_room_id LEFT JOIN hostel_bed AS b ON b.id = d.fk_bed_id WHERE d.fk_student_id=".$student_id)->queryAll();
+                $branch = yii::$app->db->createCommand("SELECT * FROM branch WHERE id = ".$student_data->fk_branch_id)->queryOne();
 
                 $country_id = ($student_data->country_id == "")? 1: $student_data->country_id;
                 $province_id = ($student_data->province_id == "")? 1: $student_data->province_id;
                 $city_id = ($student_data->city_id == "")? 1: $student_data->city_id;
                 $religion_id = ($student_data->religion_id == "")? 1: $student_data->religion_id;
                 $district_id = ($student_data->district_id == "")? 1: $student_data->district_id;
-
+                
                 /* generate PDF of challan */
                 $chalan_html = $this->render('get-chalan-pdf', [
                     'query_std_plan' => $query_std_plan,
@@ -1750,6 +1751,7 @@ class StudentController extends Controller {
                     'parent_info' => $parent_info,
                     'student_ed_info' => $student_ed_info,
                     'fee_head' => $fee_head,
+                    'branch' => $branch,
                     'country' =>  yii::$app->db->createCommand("SELECT country_name FROM ref_countries WHERE country_id = ".$country_id)->queryAll(),
                     'province' => yii::$app->db->createCommand("SELECT province_name FROM ref_province WHERE province_id = ".$province_id)->queryAll(),
                     'city' => yii::$app->db->createCommand("SELECT city_name FROM ref_cities WHERE city_id = ".$city_id)->queryAll(),

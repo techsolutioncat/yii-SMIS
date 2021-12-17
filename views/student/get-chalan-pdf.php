@@ -24,265 +24,204 @@ $this->registerCss("
 
 ");
 ?>
-
 <!-- Preview--> 
-<h2>Preview</h2>
+<div style="margin-left: 30%; padding-bottom: 20px;">
+    <?php
+        $logo = (!empty($branch) && isset($branch->school_banner))? $branch->school_banner:  Url::to('@web/img/default_logo.jfif');
+    ?>
+    <img src="<?php echo $logo;?>" style="width: 300px;">
+</div>
 <div>
-    <img src="<?= Url::to('@web/img/pre1.svg') ?>" alt="MIS" style="float: right">
-    <div style="width: 100%; border-top: 1px solid #6dd8a0;">
-        <h3>Initial Information</h3>
-        <div style="width: 50%; float:left;">
-            <table class="table table-striped">
-                <tbody>
-                    <tr> 
-                        <td style="background:none;">
-                            <p><?=Yii::t('app','Student Registration No')?>.: <span class="registeration"></span></p>
-                            <p><?=Yii::t('app','First Name')?>: <span class="firstnamePersonnel"><?php echo $detail[0]["first_name"]?></span></p>
-                            <p><?=Yii::t('app','Middle Name')?>: <span class="middlenamePerssonel"><?php echo $detail[0]['middle_name']?></span></p>
-                            <p><?=Yii::t('app','Last Name')?>: <span class="lastnamepersonel"><?php echo $detail[0]['last_name']?></span></p>
-                            <p><?=Yii::t('app','Urdu Name')?>: <span class="urdunamepersonnel"><?php echo $detail[0]['username']?></span></p>
-                            <p><?=Yii::t('app','Class')?>: <span class="classp"><?php echo $detail[0]['class_title']?></span></p>
-                            <p><?=Yii::t('app','Group')?>: <span class="gid"><?php echo $detail[0]['group_title']?></span></p>
-                            <p><?=Yii::t('app','Section')?>: <span class="sid"><?php echo $detail[0]['section_title']?></span></p>
-                            <p><?=Yii::t('app','Shift')?>: <span class="shid"><?php echo $detail[0]['shift_title']?></span></p>
-                        </td>
-                    </tr>
-                </tbody>
-            </table> 
-        </div> 
-    
-        <div style="width: 46%; float:right background:none; font-size:13px;">
-            <table class="table table-striped">
-                <tbody>
-                    <tr>
-                        <td style="background:none;">
-                            <p><?=Yii::t('app','Father Cnic')?>: <span class="input1"><?php echo $detail[0]['cnic']?></span></p>
-                            <p><?=Yii::t('app','Hostel Facility')?>: <span class="hostelInitial"></span></p>
-                            <p><?=Yii::t('app','Transport Facility')?>: <span class="transportYes">0</span></p>
-                            <p><?=Yii::t('app','Withdrawl No')?>: <span class="withdrawlno"><?php echo $detail[0]['withdrawl_no']?></span></p>
-                            <p><?=Yii::t('app','Postal Address')?>: <span class="location1"><?php echo $detail[0]['location1']?></span></p>
-                            <p><?=Yii::t('app','Country')?>: <span class="countrid"><?php echo (!empty($country))? $country[0]['country_name']: "";?></span></p>
-                            <p><?=Yii::t('app','province')?>: <span class="provinceid"><?php echo (!empty($province))? $province[0]['province_name']: "";?></span></p>
-                            <p><?=Yii::t('app','District')?>: <span class="districtid"><?php echo (!empty($District))? $District[0]['District_Name']: "";?></span></p>
-                            <p><?=Yii::t('app','City')?>: <span class="cityid"><?php echo (!empty($city))? $city[0]['city_name']: "";?></span></p>
-                            <p><?=Yii::t('app','Religion')?>: <span class="religionid"><?php echo (!empty($religion))? $religion[0]['Title']: "";?></span></p>
-                            <p><?=Yii::t('app','Gender')?>: <span class="gendderStudent"><?php echo (!empty($detail))? $detail[0]['gender_type']: "";?></span></p>
-                        </td>
-                    </tr>
-                </tbody>
-            </table> 
-        </div>
+    <h2>Preview</h2>
+    <div>
+        <img src="<?= Url::to('@web/img/pre1.svg') ?>" alt="MIS" style="float: right">
+        <div style="width: 100%; border-top: 1px solid #6dd8a0;">
+            <h3>Initial Information</h3>
+            <div style="width: 50%; float:left;">
+                <table class="table table-striped">
+                    <tbody>
+                        <tr> 
+                            <td style="background:none;">
+                                <p><?=Yii::t('app','Student Registration No')?>.: <span class="registeration"></span></p>
+                                <p><?=Yii::t('app','First Name')?>: <span class="firstnamePersonnel"><?php echo $detail[0]["first_name"]?></span></p>
+                                <p><?=Yii::t('app','Middle Name')?>: <span class="middlenamePerssonel"><?php echo $detail[0]['middle_name']?></span></p>
+                                <p><?=Yii::t('app','Last Name')?>: <span class="lastnamepersonel"><?php echo $detail[0]['last_name']?></span></p>
+                                <p><?=Yii::t('app','Urdu Name')?>: <span class="urdunamepersonnel"><?php echo $detail[0]['username']?></span></p>
+                                <p><?=Yii::t('app','Class')?>: <span class="classp"><?php echo $detail[0]['class_title']?></span></p>
+                                <p><?=Yii::t('app','Group')?>: <span class="gid"><?php echo $detail[0]['group_title']?></span></p>
+                                <p><?=Yii::t('app','Section')?>: <span class="sid"><?php echo $detail[0]['section_title']?></span></p>
+                                <p><?=Yii::t('app','Shift')?>: <span class="shid"><?php echo $detail[0]['shift_title']?></span></p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table> 
+            </div> 
+            <div style="width: 46%; float:right background:none; font-size:13px;">
+                <table class="table table-striped">
+                    <tbody>
+                        <tr>
+                            <td style="background:none;">
+                                <p><?=Yii::t('app','Father Cnic')?>: <span class="input1"><?php echo $detail[0]['cnic']?></span></p>
+                                <p><?=Yii::t('app','Hostel Facility')?>: <span class="hostelInitial"></span></p>
+                                <p><?=Yii::t('app','Transport Facility')?>: <span class="transportYes">0</span></p>
+                                <p><?=Yii::t('app','Withdrawl No')?>: <span class="withdrawlno"><?php echo $detail[0]['withdrawl_no']?></span></p>
+                                <p><?=Yii::t('app','Postal Address')?>: <span class="location1"><?php echo $detail[0]['location1']?></span></p>
+                                <p><?=Yii::t('app','Country')?>: <span class="countrid"><?php echo (!empty($country))? $country[0]['country_name']: "";?></span></p>
+                                <p><?=Yii::t('app','province')?>: <span class="provinceid"><?php echo (!empty($province))? $province[0]['province_name']: "";?></span></p>
+                                <p><?=Yii::t('app','District')?>: <span class="districtid"><?php echo (!empty($District))? $District[0]['District_Name']: "";?></span></p>
+                                <p><?=Yii::t('app','City')?>: <span class="cityid"><?php echo (!empty($city))? $city[0]['city_name']: "";?></span></p>
+                                <p><?=Yii::t('app','Religion')?>: <span class="religionid"><?php echo (!empty($religion))? $religion[0]['Title']: "";?></span></p>
+                                <p><?=Yii::t('app','Gender')?>: <span class="gendderStudent"><?php echo (!empty($detail))? $detail[0]['gender_type']: "";?></span></p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table> 
+            </div>
+        <div>
+    </div>
 
     <div>
-</div>
-
-<div>
-    <div style="width: 100%; border-top: 1px solid #6dd8a0;">
-        <img src="<?= Url::to('@web/img/pre1.svg') ?>" alt="MIS" style="float: right">
-        <div style="width: 50%; float:left;">
-            <h3>Education Information</h3>
-            <table class="table table-striped">
-                <tbody>
-                    <tr>
-                        <td style="background:none">
-                            <p><?=Yii::t('app','Degree Type')?>.: <span class="degreeid"><?php echo $student_ed_info->degree_type_id?></span></p>
-                            <p><?=Yii::t('app','Institute Name')?>: <span class="instituteStudent"><?php echo $student_ed_info->Institute_name?></span></p>
-                            <p><?=Yii::t('app','Grade')?>: <span class="gradeStudent"><?php echo $student_ed_info->grade?></span></p>
-                            <p><?=Yii::t('app','Total marks')?>: <span class="marksStudent"><?php echo $student_ed_info->total_marks?></span></p>
-                            <p><?=Yii::t('app','Degree Name')?>: <span class="degreenameStudent"><?php echo $student_ed_info->degree_name?></span></p>
-                            <p><?=Yii::t('app','Start Date')?>: <span class="startdateStudent"><?php echo $student_ed_info->start_date?></span></p>
-                            <p><?=Yii::t('app','End Date')?>: <span class="enddateStudent"><?php echo $student_ed_info->end_date?></span></p>
-                            <p><?=Yii::t('app','Marks Obtained')?>: <span class="marksontainedStudent"><?php echo $student_ed_info->marks_obtained?></span></p>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <div style="width: 46%; float:right background:none; font-size:13px;"></div>
-    </div>
-</div>
-
-<div>
-    <div style="width: 100%; border-top: 1px solid #6dd8a0;">
-        <img src="<?= Url::to('@web/img/pre2.svg') ?>" alt="MIS" style="float: right">
-        <div style="width: 50%; float:left;">
-            <h3>Parents</h3>
-            <table class="table table-striped" style="background:none; font-size:13px;">
-                <tbody>
-                    <tr> 
-                        <td style="background:none;">
-                            <p><?=Yii::t('app','Full Name')?>: <span class="fatherName"><?php echo $parent_info->first_name . $parent_info->last_name?></span></p>
-                            <p><?=Yii::t('app','Profession')?>: <span class="professionid"><?php echo $parent_info->profession?></span></p>
-                            <p><?=Yii::t('app','Designation')?>: <span class="fatherDesignation"><?php echo $parent_info->designation?></span></p>
-                            <p><?=Yii::t('app','Organization')?>: <span class="fatherOrg"><?php echo $parent_info->organisation?></span></p>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <div style="width: 46%; float:right background:none; font-size:13px;">
-            <h3>Gardian</h3>
-            <table class="table table-striped">
-                <tbody>
-                    <tr>
-                        <td style="background:none;">
-                            <p><?=Yii::t('app','Full Name')?>: <span class="motherName"><?php echo $parent_info->mother_name?></span></p>
-                            <p><?=Yii::t('app','Profession')?>: <span class="motherpid"><?php echo $parent_info->mother_profession?></span></p>
-                            <p><?=Yii::t('app','Designation')?>: <span class="motherDesignation"><?php echo $parent_info->mother_designation?></span></p>
-                            <p><?=Yii::t('app','Organization')?>: <span class="motherOrg"><?php echo $parent_info->mother_organization?></span></p>
-                            <p><?=Yii::t('app','Verifiedby')?>: <span class="Verifiedby"></span></p>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+        <div style="width: 100%; border-top: 1px solid #6dd8a0;">
+            <img src="<?= Url::to('@web/img/pre1.svg') ?>" alt="MIS" style="float: right">
+            <div style="width: 50%; float:left;">
+                <h3>Education Information</h3>
+                <table class="table table-striped">
+                    <tbody>
+                        <tr>
+                            <td style="background:none">
+                                <p><?=Yii::t('app','Degree Type')?>.: <span class="degreeid"><?php echo $student_ed_info->degree_type_id?></span></p>
+                                <p><?=Yii::t('app','Institute Name')?>: <span class="instituteStudent"><?php echo $student_ed_info->Institute_name?></span></p>
+                                <p><?=Yii::t('app','Grade')?>: <span class="gradeStudent"><?php echo $student_ed_info->grade?></span></p>
+                                <p><?=Yii::t('app','Total marks')?>: <span class="marksStudent"><?php echo $student_ed_info->total_marks?></span></p>
+                                <p><?=Yii::t('app','Degree Name')?>: <span class="degreenameStudent"><?php echo $student_ed_info->degree_name?></span></p>
+                                <p><?=Yii::t('app','Start Date')?>: <span class="startdateStudent"><?php echo $student_ed_info->start_date?></span></p>
+                                <p><?=Yii::t('app','End Date')?>: <span class="enddateStudent"><?php echo $student_ed_info->end_date?></span></p>
+                                <p><?=Yii::t('app','Marks Obtained')?>: <span class="marksontainedStudent"><?php echo $student_ed_info->marks_obtained?></span></p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div style="width: 46%; float:right background:none; font-size:13px;"></div>
         </div>
     </div>
-</div>
 
-<div>
-    <img src="<?= Url::to('@web/img/pre3.svg') ?>" alt="MIS" style="float: right">
-    <div style="width: 100%; border-top: 1px solid #6dd8a0; border-bottom: 1px solid #6dd8a0">
-        <div style="width: 50%; float:left;">
-            <h3>Parents Contact</h3>
-            <table class="table table-striped" style="background:none; font-size:13px;">
-                <tbody>
-                    <tr> 
-                        <td style="background:none;">
-                            <p><?=Yii::t('app','Contact No')?>: <span class="fatherContact"><?php echo $parent_info->contact_no?></span></p>
-                            <p><?=Yii::t('app','Office No')?>: <span class="fatherOffice"><?php echo $parent_info->office_no?></span></p>
-                            <p><?=Yii::t('app','Email')?>: <span class="fatherEmail"><?php echo $parent_info->email?></span></p>
-                            <p><?=Yii::t('app','Facebook ID')?>: <span class="fatherFb"><?php echo $parent_info->facebook_id?></span></p>
-                            <p><?=Yii::t('app','Twitter ID')?>: <span class="fatherT"><?php echo $parent_info->twitter_id?></span></p>
-                            <p><?=Yii::t('app','Linkdin ID')?>: <span class="fatherl"><?php echo $parent_info->linkdin_id?></span></p>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+    <div>
+        <div style="width: 100%; border-top: 1px solid #6dd8a0;">
+            <img src="<?= Url::to('@web/img/pre2.svg') ?>" alt="MIS" style="float: right">
+            <div style="width: 50%; float:left;">
+                <h3>Parents</h3>
+                <table class="table table-striped" style="background:none; font-size:13px;">
+                    <tbody>
+                        <tr> 
+                            <td style="background:none;">
+                                <p><?=Yii::t('app','Full Name')?>: <span class="fatherName"><?php echo $parent_info->first_name . $parent_info->last_name?></span></p>
+                                <p><?=Yii::t('app','Profession')?>: <span class="professionid"><?php echo $parent_info->profession?></span></p>
+                                <p><?=Yii::t('app','Designation')?>: <span class="fatherDesignation"><?php echo $parent_info->designation?></span></p>
+                                <p><?=Yii::t('app','Organization')?>: <span class="fatherOrg"><?php echo $parent_info->organisation?></span></p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div style="width: 46%; float:right background:none; font-size:13px;">
+                <h3>Gardian</h3>
+                <table class="table table-striped">
+                    <tbody>
+                        <tr>
+                            <td style="background:none;">
+                                <p><?=Yii::t('app','Full Name')?>: <span class="motherName"><?php echo $parent_info->mother_name?></span></p>
+                                <p><?=Yii::t('app','Profession')?>: <span class="motherpid"><?php echo $parent_info->mother_profession?></span></p>
+                                <p><?=Yii::t('app','Designation')?>: <span class="motherDesignation"><?php echo $parent_info->mother_designation?></span></p>
+                                <p><?=Yii::t('app','Organization')?>: <span class="motherOrg"><?php echo $parent_info->mother_organization?></span></p>
+                                <p><?=Yii::t('app','Verifiedby')?>: <span class="Verifiedby"></span></p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
-        <div style="width: 46%; float:right background:none; font-size:13px;">
-            <h3>Gradian Contact</h3>
+    </div>
 
-            <table class="table table-striped">
-                <tbody>
-                    <tr>
-                        <td style="background:none;">
-                            <p><?=Yii::t('app','Contact No')?>: <span class="motherContact"><?php echo $parent_info->mother_contactno?></span></p>
-                            <p><?=Yii::t('app','Office No')?>: <span class="motherOffice"><?php echo $parent_info->mother_officeno?></span></p>
-                            <p><?=Yii::t('app','Email')?>: <span class="motherEmail"><?php echo $parent_info->mother_email?></span></p>
-                            <p><?=Yii::t('app','Facebook ID')?>: <span class="motherFb"><?php echo $parent_info->mother_fb_id?></span></p>
-                            <p><?=Yii::t('app','Twitter ID')?>: <span class="motherT"><?php echo $parent_info->mother_twitter_id?></span></p>
-                            <p><?=Yii::t('app','Linkdin ID')?>: <span class="motherl"><?php echo $parent_info->mother_linkedin?></span></p>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+    <div>
+        <img src="<?= Url::to('@web/img/pre3.svg') ?>" alt="MIS" style="float: right">
+        <div style="width: 100%; border-top: 1px solid #6dd8a0;">
+            <div style="width: 50%; float:left;">
+                <h3>Parents Contact</h3>
+                <table class="table table-striped" style="background:none; font-size:13px;">
+                    <tbody>
+                        <tr> 
+                            <td style="background:none;">
+                                <p><?=Yii::t('app','Contact No')?>: <span class="fatherContact"><?php echo $parent_info->contact_no?></span></p>
+                                <p><?=Yii::t('app','Office No')?>: <span class="fatherOffice"><?php echo $parent_info->office_no?></span></p>
+                                <p><?=Yii::t('app','Email')?>: <span class="fatherEmail"><?php echo $parent_info->email?></span></p>
+                                <p><?=Yii::t('app','Facebook ID')?>: <span class="fatherFb"><?php echo $parent_info->facebook_id?></span></p>
+                                <p><?=Yii::t('app','Twitter ID')?>: <span class="fatherT"><?php echo $parent_info->twitter_id?></span></p>
+                                <p><?=Yii::t('app','Linkdin ID')?>: <span class="fatherl"><?php echo $parent_info->linkdin_id?></span></p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div style="width: 46%; float:right background:none; font-size:13px;">
+                <h3>Gradian Contact</h3>
+
+                <table class="table table-striped">
+                    <tbody>
+                        <tr>
+                            <td style="background:none;">
+                                <p><?=Yii::t('app','Contact No')?>: <span class="motherContact"><?php echo $parent_info->mother_contactno?></span></p>
+                                <p><?=Yii::t('app','Office No')?>: <span class="motherOffice"><?php echo $parent_info->mother_officeno?></span></p>
+                                <p><?=Yii::t('app','Email')?>: <span class="motherEmail"><?php echo $parent_info->mother_email?></span></p>
+                                <p><?=Yii::t('app','Facebook ID')?>: <span class="motherFb"><?php echo $parent_info->mother_fb_id?></span></p>
+                                <p><?=Yii::t('app','Twitter ID')?>: <span class="motherT"><?php echo $parent_info->mother_twitter_id?></span></p>
+                                <p><?=Yii::t('app','Linkdin ID')?>: <span class="motherl"><?php echo $parent_info->mother_linkedin?></span></p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <img src="<?= Url::to('@web/img/pre4.svg') ?>" alt="MIS" style="float: right">
+        <div style="width: 100%;border-top: 1px solid #6dd8a0">
+            <div style="width: 50%; float:left;">
+                <h3>Transport Info</h3>
+                <table class="table table-striped" style="background:none; font-size:13px;">
+                    <tbody>
+                        <tr> 
+                            <td style="background:none;">
+                                <p><?=Yii::t('app','Zone')?>: <span class="zoneid"><?php echo $student_data->zone?></span></p>
+                                <p><?=Yii::t('app','Route')?>: <span class="routeid"><?php echo $student_data->route?></span></p>
+                                <p><?=Yii::t('app','Stop')?>: <span class="stopid"><?php echo $student_data->stop?></span></p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div style="width: 46%; float:right background:none; font-size:13px;">
+                <h3>GradeHostel Info</h3>
+                <table class="table table-striped">
+                    <tbody>
+                        <tr>
+                            <td style="background:none;">
+                                <p><?=Yii::t('app','Hostel')?>: <span class="hostelid"><?php echo (!empty($hostel))? $hoste[0]['hostel']: '';?></span></p>
+                                <p><?=Yii::t('app','Floor')?>: <span class="floorid"><?php echo (!empty($hostel))? $hoste[0]['FLOOR']: '';?></span></p>
+                                <p><?=Yii::t('app','Room')?>: <span class="roomid"><?php echo (!empty($hostel))? $hoste[0]['room']: '';?></span></p>
+                                <p><?=Yii::t('app','Bed')?>: <span class="bedid"><?php echo (!empty($hostel))? $hoste[0]['bed']: '';?></span></p>
+                                <p><?=Yii::t('app','Allotment Date')?>: <span class="alomentdate"><?php echo (!empty($hostel))? $hoste[0]['Allotment']: '';?></span></p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
-
-<div>
-    <img src="<?= Url::to('@web/img/pre4.svg') ?>" alt="MIS" style="float: right">
-    <div style="width: 100%;">
-        <div style="width: 50%; float:left;">
-            <h3>Transport Info</h3>
-            <table class="table table-striped" style="background:none; font-size:13px;">
-                <tbody>
-                    <tr> 
-                        <td style="background:none;">
-                            <p><?=Yii::t('app','Zone')?>: <span class="zoneid"><?php echo $student_data->zone?></span></p>
-                            <p><?=Yii::t('app','Route')?>: <span class="routeid"><?php echo $student_data->route?></span></p>
-                            <p><?=Yii::t('app','Stop')?>: <span class="stopid"><?php echo $student_data->stop?></span></p>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <div style="width: 46%; float:right background:none; font-size:13px;">
-            <h3>GradeHostel Info</h3>
-            <table class="table table-striped">
-                <tbody>
-                    <tr>
-                        <td style="background:none;">
-                            <p><?=Yii::t('app','Hostel')?>: <span class="hostelid"><?php echo (!empty($hostel))? $hoste[0]['hostel']: '';?></span></p>
-                            <p><?=Yii::t('app','Floor')?>: <span class="floorid"><?php echo (!empty($hostel))? $hoste[0]['FLOOR']: '';?></span></p>
-                            <p><?=Yii::t('app','Room')?>: <span class="roomid"><?php echo (!empty($hostel))? $hoste[0]['room']: '';?></span></p>
-                            <p><?=Yii::t('app','Bed')?>: <span class="bedid"><?php echo (!empty($hostel))? $hoste[0]['bed']: '';?></span></p>
-                            <p><?=Yii::t('app','Allotment Date')?>: <span class="alomentdate"><?php echo (!empty($hostel))? $hoste[0]['Allotment']: '';?></span></p>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-</div>
-
-<div>
-    <div style="width: 100%; border-top: 1px solid #6dd8a0;">
-        <img src="<?= Url::to('@web/img/pre5.svg') ?>" alt="MIS" style="float: right;margin-bottom: 5px; margin-top: 10px;">
-        <div class="mis_head col-sm-6" style="">
-            <h3>Fee</h3>
-        </div>
-        <div style="width: 100%; background: none;">
-            <table class="table" style="width: 100%; background: none;">
-                <thead>
-                    <tr style="border-bottom: 1px solid #6dd8a0;">
-                        <th style="border-bottom: 1px solid #000; background: none; padding: 10px 0px;">#</th>
-                        <th style="border-bottom: 1px solid #000; background: none; padding: 10px 0px;">Heads</th>
-                        <th style="border-bottom: 1px solid #000; background: none; padding: 10px 0px;">Discount</th>
-                        <th style="border-bottom: 1px solid #000; background: none; padding: 10px 0px;">Amount</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php
-                        $total_amount = 0;
-                        if(!empty($fee_head)){
-                            foreach ($fee_head as $i => $fh) {
-                                $total_amount = $total_amount + $fh['head_amount'];
-                    ?>
-                    <tr>
-                        <td style="border-bottom: 1px solid #000; background: none; padding: 10px 0px;"><?php echo $i + 1;?></td>
-                        <td style="border-bottom: 1px solid #000; background: none; padding: 10px 0px;"><?php echo $fh['title'];?></td>
-                        <td style="border-bottom: 1px solid #000; background: none; padding: 10px 0px;"></td>
-                        <td style="border-bottom: 1px solid #000; background: none; padding: 10px 0px;"><?php echo $fh['head_amount'];?></td>
-                    </tr>
-                    <?php
-                        }
-                    ?>
-                    <tr>
-                        <td style="border-bottom: 1px solid #000; background: none; padding: 10px 0px;"></td>
-                        <td style="border-bottom: 1px solid #000; background: none; padding: 10px 0px;"></td>
-                        <td style="border-bottom: 1px solid #000; background: none; padding: 10px 0px;"></td>
-                        <td  style="border-bottom: 1px solid #000; background: none; padding: 10px 0px;">
-                            <b>Total <b style="font-weight: normal;"><?php echo $total_amount;?></b></b>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="border-bottom: 1px solid #000; background: none; padding: 10px 0px;"></td>
-                        <td style="border-bottom: 1px solid #000; background: none; padding: 10px 0px;"></td>
-                        <td style="border-bottom: 1px solid #000; background: none; padding: 10px 0px;"></td>
-                        <td  style="border-bottom: 1px solid #000; background: none; padding: 10px 0px;">
-                            <b>Discount <b style="font-weight: normal;"><?php echo 'RS.0';?></b></b>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="border-bottom: 1px solid #000; background: none; padding: 10px 0px;"></td>
-                        <td style="border-bottom: 1px solid #000; background: none; padding: 10px 0px;"></td>
-                        <td style="border-bottom: 1px solid #000; background: none; padding: 10px 0px;"></td>
-                        <td  style="border-bottom: 1px solid #000; background: none; padding: 10px 0px;">
-                            <b>Total <b style="font-weight: normal;"><?php echo 'Rs.'.$total_amount;?></b></b>
-                        </td>
-                    </tr>
-
-                    <?php
-                        }
-                    ?>
-                </tbody>
-            </table>
-        </div>
-    </div>
-</div> 
-
 <!--end of preview -->  
+<div style="height: 30px;"></div>
 <?php
 for ($itrration=1;$itrration<=$copies;$itrration++) {
     if ($itrration == 1) {
@@ -295,8 +234,8 @@ for ($itrration=1;$itrration<=$copies;$itrration++) {
         if((Yii::$app->common->getBranch() == 64 || Yii::$app->common->getBranch() == 65 || Yii::$app->common->getBranch() == 66) && $copy == 'Bank Copy'){
             continue;
         }
-        ?>
-        <div style="border-bottom:1px dashed #3f3c8b; background: url('<?= $imgaeUrl ?>'); background-repeat: no-repeat; background-position: center center;padding-bottom: 8px;
+    ?>
+        <div style=";border-bottom:1px dashed #3f3c8b; background: url('<?= $imgaeUrl ?>'); background-repeat: no-repeat; background-position: center center;padding-bottom: 8px;
             margin-bottom: 8px;">
             <div style="width: 100%; text-align: center; background-color: #3f3c8b; color: #fff; font-size:14px;">
                 <h2 style="font-size:16px; font-weight:600; color:#FFFFFF; text-transform:capitalize;margin: 0;padding: 15px 0 8px 0;"><?=strtoupper(str_replace('-',' ',Yii::$app->common->getBranchDetail()->name))?>&nbsp;<?=strtoupper(str_replace('-',' ',Yii::$app->common->getBranchDetail()->address))?></h2>
@@ -533,5 +472,76 @@ for ($itrration=1;$itrration<=$copies;$itrration++) {
             </div>
         </div> 
         <?php
-    }
+}
 ?>
+
+<div style="margin-top: 300px;">
+    <div style="width: 100%; border-top: 1px solid #6dd8a0;">
+        <img src="<?= Url::to('@web/img/pre5.svg') ?>" alt="MIS" style="float: right;margin-bottom: 5px; margin-top: 10px;">
+        <div class="mis_head col-sm-6" style="">
+            <h3>Fee</h3>
+        </div>
+        <div style="width: 100%; background: none;">
+            <table class="table" style="width: 100%; background: none;">
+                <thead>
+                    <tr style="border-bottom: 1px solid #6dd8a0;">
+                        <th style="border-bottom: 1px solid #000; background: none; padding: 10px 0px;">#</th>
+                        <th style="border-bottom: 1px solid #000; background: none; padding: 10px 0px;">Heads</th>
+                        <th style="border-bottom: 1px solid #000; background: none; padding: 10px 0px;">Discount</th>
+                        <th style="border-bottom: 1px solid #000; background: none; padding: 10px 0px;">Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+                        $total_amount = 0;
+                        if(!empty($fee_head)){
+                            foreach ($fee_head as $i => $fh) {
+                                $total_amount = $total_amount + $fh['head_amount'];
+                    ?>
+                    <tr>
+                        <td style="border-bottom: 1px solid #000; background: none; padding: 10px 0px;"><?php echo $i + 1;?></td>
+                        <td style="border-bottom: 1px solid #000; background: none; padding: 10px 0px;"><?php echo $fh['title'];?></td>
+                        <td style="border-bottom: 1px solid #000; background: none; padding: 10px 0px;"></td>
+                        <td style="border-bottom: 1px solid #000; background: none; padding: 10px 0px;"><?php echo $fh['head_amount'];?></td>
+                    </tr>
+                    <?php
+                        }
+                    ?>
+                    <tr>
+                        <td style="border-bottom: 1px solid #000; background: none; padding: 10px 0px;"></td>
+                        <td style="border-bottom: 1px solid #000; background: none; padding: 10px 0px;"></td>
+                        <td style="border-bottom: 1px solid #000; background: none; padding: 10px 0px;"></td>
+                        <td  style="border-bottom: 1px solid #000; background: none; padding: 10px 0px;">
+                            <b>Total <b style="font-weight: normal;"><?php echo $total_amount;?></b></b>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="border-bottom: 1px solid #000; background: none; padding: 10px 0px;"></td>
+                        <td style="border-bottom: 1px solid #000; background: none; padding: 10px 0px;"></td>
+                        <td style="border-bottom: 1px solid #000; background: none; padding: 10px 0px;"></td>
+                        <td  style="border-bottom: 1px solid #000; background: none; padding: 10px 0px;">
+                            <b>Discount <b style="font-weight: normal;"><?php echo 'RS.0';?></b></b>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="border-bottom: 1px solid #000; background: none; padding: 10px 0px;"></td>
+                        <td style="border-bottom: 1px solid #000; background: none; padding: 10px 0px;"></td>
+                        <td style="border-bottom: 1px solid #000; background: none; padding: 10px 0px;"></td>
+                        <td  style="border-bottom: 1px solid #000; background: none; padding: 10px 0px;">
+                            <b>Total <b style="font-weight: normal;"><?php echo 'Rs.'.$total_amount;?></b></b>
+                        </td>
+                    </tr>
+
+                    <?php
+                        }
+                    ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div> 
+
+<div>
+    <div style="position: absolute; margin-left: 190px; margin-top: 60px;">Parent Signature:</div>
+    <div style="margin-left: 310px;margin-top: -37px;height: 35px; width: 200px; border-bottom: solid 1px;"></div>
+</div>
