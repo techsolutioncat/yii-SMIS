@@ -2682,6 +2682,7 @@ class StudentController extends Controller {
                     $total_line = $phpexcel->gethighestrow(); // total number of rows
                     $total_column = $phpexcel->gethighestcolumn(); // total number of columns
 
+                    
                     if (1 < $total_line) {
                         for ($row = 2;$row <= $total_line;$row++) {
                             $data = [];
@@ -2695,8 +2696,8 @@ class StudentController extends Controller {
                             //user table data: (data[1], data[2], '', data[0], @moment2016, active, 3);
                             $password='@moment2016';
                             $password_hash = Yii::$app->security->generatePasswordHash($password);
-                            $val= array( $data[1],$data[2], '', '', $password_hash, 'active', 3, date('Y-m-d H:i:s'),4);
-                            $set = array('username','first_name', 'middle_name','last_name',  'password_hash', 'status', 'fk_role_id', 'created_at','fk_branch_id');
+                            $val= array( $data[1],$data[2], '', '', $password_hash, 'active', 3, 1,date('Y-m-d H:i:s'),4);
+                            $set = array('username','first_name', 'middle_name','last_name',  'password_hash', 'status', 'fk_role_id', 'gender_type''created_at','fk_branch_id');
                             $where = array();
                             foreach ($set as $i => $key) {
                                 $where[$key] = $val[$i];
