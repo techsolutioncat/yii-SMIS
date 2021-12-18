@@ -117,9 +117,9 @@ class AnalysisController extends Controller
                 ]);
 
                     /*SELECT sb.*,sd.title from subjects sb
-left JOIN subject_division sd ON sd.fk_subject_id=sb.id
-LEFT JOIN ref_section rs ON rs.class_id=sb.fk_class_id
- WHERE sb.fk_class_id =11 AND sb.fk_group_id=7 AND rs.section_id=16*/
+                    left JOIN subject_division sd ON sd.fk_subject_id=sb.id
+                    LEFT JOIN ref_section rs ON rs.class_id=sb.fk_class_id
+                    WHERE sb.fk_class_id =11 AND sb.fk_group_id=7 AND rs.section_id=16*/
 
                 $searchModel->fk_branch_id = Yii::$app->common->getBranch();
                 $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
@@ -415,7 +415,6 @@ LEFT JOIN ref_section rs ON rs.class_id=sb.fk_class_id
                 ]);
                 return json_encode(['status'=>1,'details'=>$data]);
 
-
             }else{
                 return $this->redirect('site/login');
             }
@@ -542,7 +541,7 @@ LEFT JOIN ref_section rs ON rs.class_id=sb.fk_class_id
         $sectionval= Yii::$app->request->get('sectionId');
         $month= Yii::$app->request->get('month');
         $attendanceType= Yii::$app->request->get('attendanceType');
-*/
+        */
 
             $data       = Yii::$app->request->get();
                 /*get exams.*/

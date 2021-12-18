@@ -35,60 +35,71 @@ use kartik\date\DatePicker;
         [
             'label'=>'Present',
             'value' =>function($data)  use ($attendance_type,$year_month){
-                $query = \app\models\StudentAttendance::find()->where(['fk_stu_id'=>$data->stu_id,'leave_type'=>'present']);
+                // $query = \app\models\StudentAttendance::find()->where(['fk_stu_id'=>$data->stu_id,'leave_type'=>'present']);
+                $query = "SELECT a.* FROM student_attendance AS a LEFT JOIN student_info AS i ON a.fk_stu_id = i.stu_id LEFT JOIN ref_session AS se ON se.session_id = i.session_id WHERE a.fk_stu_id = ".$data->stu_id." AND a.leave_type = 'present' AND a.date BETWEEN se.start_date AND se.end_date";
 
                 /*if type is year mont that follwoing query will be executed*/
                 if($attendance_type == 'year-month'){
-                    $query->andWhere(['=','DATE_FORMAT(date, "%Y-%m")',$year_month]);
+                    // $query->andWhere(['=','DATE_FORMAT(date, "%Y-%m")',$year_month]);
+                    $query .= " AND FORMAT (a.date, 'yyyy-MM-dd') = ".$year_month;
                 };
-
-                $presentCount = $query->count();
-                return $presentCount;
+                $presentCount = yii::$app->db->createCommand($query)->queryAll();
+                // $presentCount = $query->count();
+                return count($presentCount);;
             }
         ],
         [
             'label'=>'Absent',
             'value' =>function($data)  use ($attendance_type,$year_month){
-                $query = \app\models\StudentAttendance::find()->where(['fk_stu_id'=>$data->stu_id,'leave_type'=>'absent']);
-
+                // $query = \app\models\StudentAttendance::find()->where(['fk_stu_id'=>$data->stu_id,'leave_type'=>'absent']);
+                $query = "SELECT a.* FROM student_attendance AS a LEFT JOIN student_info AS i ON a.fk_stu_id = i.stu_id LEFT JOIN ref_session AS se ON se.session_id = i.session_id WHERE a.fk_stu_id = ".$data->stu_id." AND a.leave_type = 'absent' AND a.date BETWEEN se.start_date AND se.end_date";
+                // ->andWhere(['between', 'date', $dats.' 00:00:00', $dats.' 23:59:59'])
+                // ->one();
                 /*if type is year mont that follwoing query will be executed*/
                 if($attendance_type == 'year-month'){
-                    $query->andWhere(['=','DATE_FORMAT(date, "%Y-%m")',$year_month]);
+                    // $query->andWhere(['=','DATE_FORMAT(date, "%Y-%m")',$year_month]);
+                    $query .= " AND FORMAT (a.date, 'yyyy-MM-dd') = ".$year_month;
                 };
+                $absentCount = yii::$app->db->createCommand($query)->queryAll();
+                // $absentCount = $query->count();
 
-                $absentCount = $query->count();
-
-                return $absentCount;
+                return count($absentCount);
             }
         ],
         [
             'label'=>'Late Comer',
             'value' =>function($data)  use ($attendance_type,$year_month){
-                $query = \app\models\StudentAttendance::find()->where(['fk_stu_id'=>$data->stu_id,'leave_type'=>'latecomer']);
+                // $query = \app\models\StudentAttendance::find()->where(['fk_stu_id'=>$data->stu_id,'leave_type'=>'latecomer']);
 
+                $query = "SELECT a.* FROM student_attendance AS a LEFT JOIN student_info AS i ON a.fk_stu_id = i.stu_id LEFT JOIN ref_session AS se ON se.session_id = i.session_id WHERE a.fk_stu_id = ".$data->stu_id." AND a.leave_type = 'latecomer' AND a.date BETWEEN se.start_date AND se.end_date";
 
                 /*if type is year mont that follwoing query will be executed*/
                 if($attendance_type == 'year-month'){
-                    $query->andWhere(['=','DATE_FORMAT(date, "%Y-%m")',$year_month]);
+                    // $query->andWhere(['=','DATE_FORMAT(date, "%Y-%m")',$year_month]);
+                    $query .= " AND FORMAT (a.date, 'yyyy-MM-dd') = ".$year_month;
                 };
 
-                $sleaveCount = $query->count();
+                // $sleaveCount = $query->count();
+                $sleaveCount = yii::$app->db->createCommand($query)->queryAll();
 
-                return $sleaveCount;
+                return count($sleaveCount);
             }
         ],
         [
             'label'=>'Leave',
             'value' =>function($data) use ($attendance_type,$year_month){
-                $query = \app\models\StudentAttendance::find()->where(['fk_stu_id'=>$data->stu_id,'leave_type'=>'leave']);
+                // $query = \app\models\StudentAttendance::find()->where(['fk_stu_id'=>$data->stu_id,'leave_type'=>'leave']);
+                $query = "SELECT a.* FROM student_attendance AS a LEFT JOIN student_info AS i ON a.fk_stu_id = i.stu_id LEFT JOIN ref_session AS se ON se.session_id = i.session_id WHERE a.fk_stu_id = ".$data->stu_id." AND a.leave_type = 'leave' AND a.date BETWEEN se.start_date AND se.end_date";
 
 
                 /*if type is year mont that follwoing query will be executed*/
                 if($attendance_type == 'year-month'){
-                    $query->andWhere(['=','DATE_FORMAT(date, "%Y-%m")',$year_month]);
+                    // $query->andWhere(['=','DATE_FORMAT(date, "%Y-%m")',$year_month]);
+                    $query .= " AND FORMAT (a.date, 'yyyy-MM-dd') = ".$year_month;
                 }; 
-                $leaveCount = $query->count(); 
-                return $leaveCount;
+                // $leaveCount = $query->count(); 
+                $leaveCount = yii::$app->db->createCommand($query)->queryAll();
+                return count($leaveCount);
 
             }
         ],
@@ -99,6 +110,22 @@ use kartik\date\DatePicker;
                 return date('d M,Y',strtotime($data->registration_date));
             }
         ],
+        // [
+        //     'label'=>'Total Working Days',
+        //     'value' =>function($data)  use ($attendance_type,$year_month){
+        //         $query = "SELECT DATEDIFF(se.start_date, se.end_date) AS days FROM student_attendance AS a LEFT JOIN student_info AS i ON a.fk_stu_id = i.stu_id LEFT JOIN ref_session AS se ON se.session_id = i.session_id WHERE a.fk_stu_id = ".$data->stu_id;
+        //         // DATEDIFF(expiration_date, purchase_date) AS days
+                
+        //         /*if type is year mont that follwoing query will be executed*/
+        //         if($attendance_type == 'year-month'){
+        //             $query .= " AND FORMAT (a.date, 'yyyy-MM-dd') = ".$year_month;
+        //         }; 
+        //         $query .= " GROUP BY a.fk_stu_id";
+        //         $totalDays = yii::$app->db->createCommand($query)->queryOne();
+        //         return (isset($totalDays->days))? $totalDays->days: 0;
+
+        //     }
+        // ],
         [
             'header'=>'Actions',
             'class' => 'yii\grid\ActionColumn',
