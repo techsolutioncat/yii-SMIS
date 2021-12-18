@@ -9,6 +9,7 @@ use yii\widgets\ActiveForm;
         <li ><a data-toggle="tab" href="#Single-Examination">Single Examination</a></li>
         <li><a data-toggle="tab" href="#Multiple-Examination">Multiple Examination</a></li>
         <li><a data-toggle="tab" href="#Class-Wise-Examination">Class Wise Examination</a></li>
+        <li><a data-toggle="tab" href="#Top-Position">Top 5 Postion</a></li>
     </ul>
     <div class="tab-content">
         <div id="Single-Examination" class="tab-pane fade in">
@@ -18,6 +19,9 @@ use yii\widgets\ActiveForm;
 
         </div>
         <div id="Class-Wise-Examination" class="tab-pane fade">
+
+        </div> 
+        <div id="Top-Position" class="tab-pane fade">
 
         </div> 
       </div>

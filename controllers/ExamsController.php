@@ -800,8 +800,8 @@ class ExamsController extends Controller
                     'exam_id'      =>$section_id,
                 ]);*/
             }
-            if($serialize_data['tab_type']=='#Class-Wise-Examination'){
-                $tabId = 'Class-Wise-Examination';
+            if($serialize_data['tab_type']=='#Class-Wise-Examination' || $serialize_data['tab_type']=='#Top-Position'){
+                $tabId = ($serialize_data['tab_type'] == '#Class-Wise-Examination')? 'Class-Wise-Examination': 'Top-Position';
                 $studentToralMarks = [];
                 if($class_id){
                     $students= StudentInfo::find()
@@ -913,9 +913,10 @@ class ExamsController extends Controller
                             $query_data[$i]['query'] = $studentexam_arr[$row['student_id']];
                             $query_data[$i]['postion'] = $row;
                         }
-                        
+
                         $examtype = ExamType::findOne($exam);
-                        $details_html = $this->renderAjax('/reports/academics/class_wise_resultsheet',[
+                        $send_url = ($serialize_data['tab_type'] == '#Top-Position')? '/reports/academics/top-position': '/reports/academics/class_wise_resultsheet';
+                        $details_html = $this->renderAjax($send_url,[
                             'query'=>$studentexam_arr,
                             'subjects'=>$subjects,
                             'class_id'=>$class_id,

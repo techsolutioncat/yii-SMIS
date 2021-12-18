@@ -20,6 +20,9 @@ $(document).on('click','a[data-toggle="tab"]', function (e) {
     }else if(target =='#Class-Wise-Examination'){
         $('#single-dropdown').show();
         $('#multiple-dropdown').hide();
+    }else if(target =='#Top-Position'){
+        $('#single-dropdown').show();
+        $('#multiple-dropdown').hide();
     }else{
         $('#single-dropdown').hide();
         $('#multiple-dropdown').hide();
@@ -109,6 +112,22 @@ $(document).on('click','#search-exam-dmc',function () {
                         var dataUrl = exportUrl+"?fk_class_id="+classId+"&fk_group_id="+groupId+"&fk_section_id="+sectionId+"&fk_exam_type="+examType +'&position=' +  str_position;
                         $('.export-classwise-resultsheet').html('<a href="'+dataUrl+'"><img src="/mis/img/print.png" alt="print report"></a>');
                         $(".export-classwise-resultsheet a").attr( "params",arrayParam );
+
+                        $('.exportdmcs').hide();
+                    }
+
+                    if(result.tabId =='Top-Position'){
+                        var arrayParam = {"param1":1,"param2":2};
+                        $("#"+result.tabId).empty().html(result.html);
+                        var exportUrl = $('.top-position').data('url');
+                        $('#mCSB_1_container ul.std-exam-list li').each(function() {
+                            var id = ($(this).find('a').data('position') != "")? $(this).find('a').data('position'): 0;
+                            position.push(id);
+                        });
+                        var str_position = JSON.stringify(position);
+                        var dataUrl = exportUrl+"?fk_class_id="+classId+"&fk_group_id="+groupId+"&fk_section_id="+sectionId+"&fk_exam_type="+examType +'&position=' +  str_position;
+                        $('.top-position').html('<a href="'+dataUrl+'"><img src="/mis/img/print.png" alt="print report"></a>');
+                        $(".top-position a").attr( "params",arrayParam );
 
                         $('.exportdmcs').hide();
                     }

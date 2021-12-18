@@ -1137,6 +1137,221 @@ class ReportsController extends Controller
         }
     }
 
+    public function actionTopPositionSheet(){
+        if(Yii::$app->request->isAjax){
+            $data= Yii::$app->request->post();
+            if($data['class_id']){
+                $students= StudentInfo::find()
+                    ->select(['student_info.stu_id','u.username roll_no','u.id user_id'])
+                    ->innerJoin('user u','u.id=student_info.user_id')
+                    ->where(['student_info.fk_branch_id'=>Yii::$app->common->getBranch(),'student_info.class_id'=>$data['class_id'],'student_info.group_id'=>($data['group_id'])?$data['group_id']:null,'student_info.section_id'=>$data['section']])
+                    ->asArray()
+                    ->all();
+
+                /*total subjects*/
+                $subjects = Exam::find()
+                    ->select([
+                        'sb.id subject_id',
+                        'sb.title subject',
+                        'sum(exam.total_marks) total_marks'
+                    ])
+                    ->innerJoin('exam_type et','et.id=exam.fk_exam_type')
+                    ->innerJoin('ref_class c','c.class_id=exam.fk_class_id')
+                    ->leftJoin('ref_group g','g.group_id=exam.fk_group_id ')
+                    ->leftJoin('ref_section s','s.section_id=exam.fk_section_id')
+                    ->innerJoin('subjects sb','sb.id=exam.fk_subject_id and c.class_id = sb.fk_class_id and g.group_id=sb.fk_group_id')
+                    ->where(['et.id'=>$data['exam_type'], 'c.class_id'=>$data['class_id'],'g.group_id'=>($data['group_id'])?$data['group_id']:null,'s.section_id'=>$data['section']])
+                    ->groupBy(['sb.title','sb.id'])->asArray()->all();
+
+                if(count($students)){
+                    $studentexam_arr=[];
+                    $examsubjects_arr=[];
+                    foreach ($students as  $skey=>$stu_id){
+                        $subjects_data = Exam::find()
+                            ->select([
+                                'st.stu_id',
+                                'concat(u.first_name," ",u.last_name) student_name',
+                                'c.class_id',
+                                'c.title',
+                                'g.group_id',
+                                'g.title',
+                                's.section_id',
+                                's.title',
+                                'sb.title subject',
+                                'sum(exam.total_marks) total_marks',
+                                'sum(exam.passing_marks) passing_marks',
+                                'round(sum(sm.marks_obtained),2) marks_obtained'
+                            ])
+                            ->innerJoin('exam_type et','et.id=exam.fk_exam_type')
+                            ->innerJoin('ref_class c','c.class_id=exam.fk_class_id')
+                            ->innerJoin('subjects sb','sb.id=exam.fk_subject_id')
+                            ->leftJoin('student_marks sm','sm.fk_exam_id=exam.id')
+                            ->leftJoin('student_info st',' st.stu_id=sm.fk_student_id')
+                            ->leftJoin('ref_group g','g.group_id=exam.fk_group_id')
+                            ->leftJoin('ref_section s','s.class_id=exam.fk_class_id')
+                            ->innerJoin('user u','u.id=st.user_id')
+                            ->where(['et.id'=>$data['exam_type'],'exam.fk_branch_id'=>Yii::$app->common->getBranch(),'c.class_id'=>$data['class_id'],'g.group_id'=>($data['group_id'])?$data['group_id']:null,'s.section_id'=>$data['section'],'st.stu_id'=>$stu_id['stu_id'] ])
+                            ->groupBy(['st.stu_id','c.class_id','c.title','g.group_id','g.title','s.section_id','s.title','sb.title'])->asArray()->all();
+
+
+                        if(count($subjects_data)>0){
+                            $studentexam_arr[$stu_id['stu_id']]['student_id']=$stu_id['roll_no'];
+                            $studentexam_arr[$stu_id['stu_id']]['name']=$stu_id['user_id'];
+                            foreach ($subjects_data as $indata){
+                                $studentexam_arr[$stu_id['stu_id']][] = $indata['marks_obtained'];
+                                if($skey==0){
+                                    $examsubjects_arr['heads'][] = $indata['subject'];
+                                    $examsubjects_arr['total_marks'][] = $indata['total_marks'];
+                                }
+                            }
+                        }
+                    }
+                    $examtype = ExamType::findOne($data['exam_type']);
+                    $details = $this->renderPartial('academics/class_wise_resultsheet',[
+                        'query'=>$studentexam_arr,
+                        'subjects'=>$subjects,
+                        'class_id'=>$data['class_id'],
+                        'group_id'=>($data['group_id'])?$data['group_id']:null,
+                        'section_id'=>$data['section'],
+                        'examtype'=>$examtype,
+                        'heads_marks'=>$examsubjects_arr
+                    ]);
+                    return json_encode(['status'=>1,'details'=>$details]);
+                }
+            }
+        }
+        else{
+            $data= Yii::$app->request->get();
+            if($data['fk_class_id']){
+                $students= StudentInfo::find()
+                    ->select(['student_info.stu_id','u.username roll_no','u.id user_id'])
+                    ->innerJoin('user u','u.id=student_info.user_id')
+                    ->where(['student_info.fk_branch_id'=>Yii::$app->common->getBranch(),'student_info.class_id'=>$data['fk_class_id'],'student_info.group_id'=>($data['fk_group_id'])?$data['fk_group_id']:null,'student_info.section_id'=>$data['fk_section_id']])
+                    ->asArray()
+                    ->all();
+
+                /*total subjects*/
+                $subjects = Exam::find()
+                    ->select([
+                        'sb.id subject_id',
+                        'sb.title subject',
+                        'sum(exam.total_marks) total_marks'
+                    ])
+                    ->innerJoin('exam_type et','et.id=exam.fk_exam_type')
+                    ->innerJoin('ref_class c','c.class_id=exam.fk_class_id')
+                    ->leftJoin('ref_group g','g.group_id=exam.fk_group_id ')
+                    ->leftJoin('ref_section s','s.section_id=exam.fk_section_id')
+                    ->innerJoin('subjects sb','sb.id=exam.fk_subject_id and c.class_id = sb.fk_class_id and g.group_id=sb.fk_group_id')
+                    ->where(['et.id'=>$data['fk_exam_type'], 'c.class_id'=>$data['fk_class_id'],'g.group_id'=>($data['fk_group_id'])?$data['fk_group_id']:null,'s.section_id'=>$data['fk_section_id']])
+                    ->groupBy(['sb.title','sb.id'])->asArray()->all();
+
+                if(count($students)){
+                    $studentexam_arr=[];
+                    $examsubjects_arr=[];
+                    foreach ($students as  $skey=>$stu_id){
+                        $subjects_data = Exam::find()
+                            ->select([
+                                'st.stu_id',
+                                'concat(u.first_name," ",u.last_name) student_name',
+                                'c.class_id',
+                                'c.title',
+                                'g.group_id',
+                                'g.title',
+                                's.section_id',
+                                's.title',
+                                'sb.title subject',
+                                'sum(exam.total_marks) total_marks',
+                                'sum(exam.passing_marks) passing_marks',
+                                'round(sum(sm.marks_obtained),2) marks_obtained'
+                            ])
+                            ->innerJoin('exam_type et','et.id=exam.fk_exam_type')
+                            ->innerJoin('ref_class c','c.class_id=exam.fk_class_id')
+                            ->innerJoin('subjects sb','sb.id=exam.fk_subject_id')
+                            ->leftJoin('student_marks sm','sm.fk_exam_id=exam.id')
+                            ->leftJoin('student_info st',' st.stu_id=sm.fk_student_id')
+                            ->leftJoin('ref_group g','g.group_id=exam.fk_group_id')
+                            ->leftJoin('ref_section s','s.class_id=exam.fk_class_id')
+                            ->innerJoin('user u','u.id=st.user_id')
+                            ->where(['et.id'=>$data['fk_exam_type'],'exam.fk_branch_id'=>Yii::$app->common->getBranch(),'c.class_id'=>$data['fk_class_id'],'g.group_id'=>($data['fk_group_id'])?$data['fk_group_id']:null,'s.section_id'=>$data['fk_section_id'],'st.stu_id'=>$stu_id['stu_id'] ])
+                            ->groupBy(['st.stu_id','c.class_id','c.title','g.group_id','g.title','s.section_id','s.title','sb.title'])->asArray()->all();
+
+
+
+                        if(count($subjects_data)>0){
+                            $sumTotalMarks = 0;
+                            $studentexam_arr[$stu_id['stu_id']]['student_id']=$stu_id['roll_no'];
+                            $studentexam_arr[$stu_id['stu_id']]['name']=$stu_id['user_id'];
+                            $std = $stu_id['stu_id'];
+                            foreach ($subjects_data as $indata){
+                                if($std == $stu_id['stu_id']){
+                                    $sumTotalMarks  =  $sumTotalMarks + $indata['marks_obtained'];
+                                    $studentToralMarks [$stu_id['stu_id']] = $sumTotalMarks;
+                                }
+                                $studentexam_arr[$stu_id['stu_id']][] = $indata['marks_obtained'];
+                                if($skey==0){
+                                    $examsubjects_arr['heads'][] = $indata['subject'];
+                                    $examsubjects_arr['total_marks'][] = $indata['total_marks'];
+                                }
+
+                                /*sum condition*/
+                                if($std != $stu_id['stu_id']){
+                                    $sumTotalMarks  = 0;
+                                }
+                            }
+                        }
+                    }
+                    /*maintain student id's and sort desc.*/
+                    natcasesort($studentToralMarks);
+                    $sortArr = array_reverse($studentToralMarks, true);
+                    $position  = [];
+                    $counter= 1;
+                    $stdMarks = 0;
+                    /*custom sort*/
+                    foreach($sortArr as $key=>$totalStdObtainMarks){
+                        if($stdMarks ==0){
+                            $stdMarks = $totalStdObtainMarks;
+                        }
+                        if($stdMarks == $totalStdObtainMarks){
+                            //echo $stdMarks.'----'.$totalStdObtainMarks.'----' .$counter."<br/>";
+                            $position[] = ['position'=>$counter,'student_id'=>$key,'marks'=>$totalStdObtainMarks];
+                        }else{
+                            $counter = $counter+1;
+                            $position[] = ['position'=>$counter,'student_id'=>$key,'marks'=>$totalStdObtainMarks];
+                            //echo $stdMarks.'----'.$totalStdObtainMarks.'----' .$counter."-No pos - <br/>";
+                        }
+                        $stdMarks = $totalStdObtainMarks;
+                    }
+                    $examtype = ExamType::findOne($data['fk_exam_type']);
+                    $resultsheet= Yii::$app->common->getCGSName($data['fk_class_id'],$data['fk_group_id'],$data['fk_section_id']).' - '.ucfirst($examtype->type);
+                    $query_data = [];
+                    //Customize data from position.
+                    foreach ($position as $i => $row) {
+                        $query_data[$i]['query'] = $studentexam_arr[$row['student_id']];
+                        $query_data[$i]['postion'] = $row;
+                    }
+                    $details = $this->renderPartial('academics/top-position',[
+                        'query'=>$studentexam_arr,
+                        'subjects'=>$subjects,
+                        'class_id'=>$data['fk_class_id'],
+                        'group_id'=>($data['fk_group_id'])?$data['fk_group_id']:null,
+                        'section_id'=>$data['fk_section_id'],
+                        'examtype'=>$examtype,
+                        'heads_marks'=>$examsubjects_arr,
+                        'positions'=>$position,
+                        'query_data'=>$query_data
+                    ]);
+                    $this->layout = 'pdf';
+                    //$mpdf = new mPDF('', 'A4');
+                    $mpdf = new mPDF('','', 0, '', 2, 2, 3, 3, 2, 2, 'A4');
+                    $stylesheet = file_get_contents('css/pdf.css'); // external css
+                    $mpdf->WriteHTML($stylesheet,1);
+                    $mpdf->WriteHTML($details);
+                    $mpdf->Output('Result-sheet-'.$resultsheet.'.pdf', 'D');
+                }
+            }
+        }
+    }
+
 
     public function actionNewAdmissionClasswisePdf(){
         $newadmissionview=$this->renderAjax('statistics/new-admission-classwise-pdf');
