@@ -2683,7 +2683,8 @@ class StudentController extends Controller {
                     $total_column = $phpexcel->gethighestcolumn(); // total number of columns
 
                     
-                    if (1 < $total_line) {
+                    
+if (1 < $total_line) {
                         for ($row = 2;$row <= $total_line;$row++) {
                             $data = [];
 
@@ -2696,8 +2697,8 @@ class StudentController extends Controller {
                             //user table data: (data[1], data[2], '', data[0], @moment2016, active, 3);
                             $password='@moment2016';
                             $password_hash = Yii::$app->security->generatePasswordHash($password);
-                            $val= array( $data[1],$data[2], '', '', $password_hash, 'active', 3, 1,date('Y-m-d H:i:s'),4);
-                            $set = array('username','first_name', 'middle_name','last_name',  'password_hash', 'status', 'fk_role_id', 'gender_type', 'created_at','fk_branch_id');
+                            $val= array( $data[1],$data[2], '', '', $password_hash, 'active', 3,date('Y-m-d H:i:s'),4);
+                            $set = array('username','first_name', 'middle_name','last_name',  'password_hash', 'status', 'fk_role_id', 'created_at','fk_branch_id');
                             $where = array();
                             foreach ($set as $i => $key) {
                                 $where[$key] = $val[$i];
@@ -2707,10 +2708,10 @@ class StudentController extends Controller {
                             $user_id = Yii::$app->db->getLastInsertID();
 
                             // INSERT student_info
-                            $set = array('user_id', 'fk_branch_id', 'dob', 'shift_id', 'religion_id', 'class_id', 'section_id', 'location1', 'is_active', 'registration_date');
+                            $set = array('user_id', 'fk_branch_id', 'dob', 'shift_id', 'religion_id', 'class_id', 'section_id', 'location1', 'is_active', 'registration_date','gender_type');
                             $reg_date = strtotime($data[10]);
                             $dob = strtotime($data[9]);
-                            $val = array($user_id, 4, date('Y-m-d H:i:s', $dob), 3, 1, $data[6],  $data[7], $data[12], 1, date('Y-m-d H:i:s', $reg_date));
+                            $val = array($user_id, 4, date('Y-m-d H:i:s', $dob), 3, 1, $data[6],  $data[7], $data[12], 1, date('Y-m-d H:i:s', $reg_date),1);
                             $where = array();
                             foreach ($set as $i => $key) {
                                 $where[$key] = $val[$i];
