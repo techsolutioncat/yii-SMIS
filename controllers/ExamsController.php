@@ -901,8 +901,19 @@ class ExamsController extends Controller
                                 //echo $stdMarks.'----'.$totalStdObtainMarks.'----' .$counter."-No pos - <br/>";
                             }
                             $stdMarks = $totalStdObtainMarks;
+
+                            if($counter > 4){
+                                break;
+                            }
                         }
                         //echo Yii::$app->common->multidimensional_search($position, ['student_id'=>276]);
+                        $query_data = [];
+                        //Customize data from position.
+                        foreach ($position as $i => $row) {
+                            $query_data[$i]['query'] = $studentexam_arr[$row['student_id']];
+                            $query_data[$i]['postion'] = $row;
+                        }
+                        
                         $examtype = ExamType::findOne($exam);
                         $details_html = $this->renderAjax('/reports/academics/class_wise_resultsheet',[
                             'query'=>$studentexam_arr,
@@ -912,7 +923,8 @@ class ExamsController extends Controller
                             'section_id'=>$group_id,
                             'examtype'=>$examtype,
                             'heads_marks'=>$examsubjects_arr,
-                            'positions'=>$position
+                            'positions'=>$position,
+                            'query_data' => $query_data
                         ]);
                         if(count($studentexam_arr)>0){
                             $status = 1;

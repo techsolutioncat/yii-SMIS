@@ -107,7 +107,7 @@ $(document).on('click','#search-exam-dmc',function () {
                         });
                         var str_position = JSON.stringify(position);
                         var dataUrl = exportUrl+"?fk_class_id="+classId+"&fk_group_id="+groupId+"&fk_section_id="+sectionId+"&fk_exam_type="+examType +'&position=' +  str_position;
-                        $('.export-classwise-resultsheet').html('<a href="'+dataUrl+'"><img src="/mis/img/print.png" alt="print VAN DISEL DMC"></a>');
+                        $('.export-classwise-resultsheet').html('<a href="'+dataUrl+'"><img src="/mis/img/print.png" alt="print report"></a>');
                         $(".export-classwise-resultsheet a").attr( "params",arrayParam );
 
                         $('.exportdmcs').hide();

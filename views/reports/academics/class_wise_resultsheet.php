@@ -39,53 +39,91 @@ use yii\helpers\Url;
         <?php
         $i=1;
 
-        foreach ($query as $student_id=>$marks){
-            $totalMarks_arr = [];
-            $totalMarks = 0;
-            $total_marks_obtain= 0;
-            $percentage=0;
-            echo "<tr>";
-            echo "<td>".$i."</td>";
-            foreach ($marks as $key=>$std_mark_obt){
+        foreach ($query_data as $i => $row){
+            // $totalMarks_arr = [];
+            // $totalMarks = 0;
+            // $total_marks_obtain= 0;
+            // $percentage=0;
+            // echo "<tr>";
+            // echo "<td>".$i."</td>";
+            // foreach ($marks as $key=>$std_mark_obt){
 
-                if($key==='name'){
-                    echo "<td>";
-                    echo Yii::$app->common->getName($std_mark_obt);
-                    echo "</td>";
+            //     if($key==='name'){
+            //         echo "<td>";
+            //         echo Yii::$app->common->getName($std_mark_obt);
+            //         echo "</td>";
 
-                }else if($key==='student_id'){
-                    echo "<td>";
-                    echo $std_mark_obt;
-                    echo "</td>";
-                }else{
-                    $totalMarks_arr[$i][] = $totalMarks+$std_mark_obt;
-                    echo "<td>";
-                    echo $std_mark_obt;
-                    echo "</td>";
+            //     }else if($key==='student_id'){
+            //         echo "<td>";
+            //         echo $std_mark_obt;
+            //         echo "</td>";
+            //     }else{
+            //         $totalMarks_arr[$i][] = $totalMarks+$std_mark_obt;
+            //         echo "<td>";
+            //         echo $std_mark_obt;
+            //         echo "</td>";
 
-                }
+            //     }
 
 
-            }
-            $total_marks_obtain = array_sum($totalMarks_arr[$i]);
-            if($max_marks>0){
-                $percentage= $total_marks_obtain*100/$max_marks;
-            }else{
-                $percentage = 0;
-            }
-            echo "<td>";
-            echo number_format($total_marks_obtain, 2, '.', '');
-            echo "</td>";
-            echo "<td>";
-            echo round($percentage,1)."%";
-            echo "</td>";
-            if(isset($positions)){
-                echo "<td>".Yii::$app->common->multidimensional_search($positions, ['student_id'=>$student_id])."</td>";
-            }else{
-                echo "<td>N/A</td>";
-            }
-            echo "<tr>";
-            $i++;
+            // }
+            // $total_marks_obtain = array_sum($totalMarks_arr[$i]);
+            // if($max_marks>0){
+            //     $percentage= $total_marks_obtain*100/$max_marks;
+            // }else{
+            //     $percentage = 0;
+            // }
+            // echo "<td>";
+            // echo number_format($total_marks_obtain, 2, '.', '');
+            // echo "</td>";
+            // echo "<td>";
+            // echo round($percentage,1)."%";
+            // echo "</td>";
+            // if(isset($positions) && !empty($positions)){
+            //     echo "<td>".Yii::$app->common->multidimensional_search($positions, ['student_id'=>$student_id])."</td>";
+            // }else{
+            //     echo "<td>N/A</td>";
+            // }
+            // echo "<tr>";
+            // $i++;
+        ?>
+        <tr>
+            <?php $total_marks = 0;?>
+            <td><?php echo $i + 1;?></td>
+            <td><?php echo $row['query']['student_id'];?></td>
+            <td><?php echo Yii::$app->common->getName($row['query']['name']);?></td>
+            <td>
+                <?php 
+                    $val = (isset($row['query'][0]))? $row['query'][0]: 0;
+                    $total_marks += $val;
+                    echo $val;
+                ?>
+            </td>
+            <td>
+                <?php 
+                    $val = (isset($row['query'][1]))? $row['query'][1]: 0;
+                    $total_marks += $val;
+                    echo $val;
+                ?>
+            </td>
+            <td>
+                <?php 
+                    $val = (isset($row['query'][2]))? $row['query'][2]: 0;
+                    $total_marks += $val;
+                    echo $val;
+                ?>
+            </td>
+            <td><?php echo $total_marks;?></td>
+            <td>
+                <?php echo round($total_marks*100/$max_marks, 1).'%'?>
+            </td>
+            <td>
+                <?php 
+                    echo (isset($row['postion']['position']))? $row['postion']['position']: 'N/A';
+                ?>
+            </td>
+        </tr>
+        <?php
         }
         ?>
 
