@@ -3317,28 +3317,42 @@ $(document).on('click','#discount-modal',function () {
 
 });
 
-
-
 /*================send sms to whole school ====== */
+$(document).on('click', '#sms_to_branch', function() {
+    var smsModal = $('#sendsmsWhole');
+    $('div').removeClass('has-error');
+    smsModal.modal();
+});
+
+$(".loading").hide();
 
 $(document).on('click','#sendsmsWholeschools',function(){
-   // alert('adsf');
-    var textarea=$('#smsWholescholl').val();
+    var textarea = $('#smsWholeSchool').val();
     var getUrl=$(this).data('url');
-    // alert(getUrl);
-    //return false;
-   $.ajax({
-            type: "POST",
-            data: {textarea:textarea},
-            url: getUrl,
-            cache: false,
-            success: function(result){
-                console.log(result);
-                $('#sucmsg').text(result);
-                //$(".floorAjax").html(result);
-                }
-           });
-        });
+
+    if(textarea == '') {
+        $('#smsWholeSchool').parent().addClass('has-error');
+        return false;
+    }
+    $('#sendsmsWhole').hide();
+    $(".loading").css('top', '0px').show();
+    $.ajax({
+        type: "POST",
+        data: {textarea:textarea},
+        url: getUrl,
+        success: function(success){
+            if(success){
+                $(".loading").hide();
+            }
+        }
+    });
+});
+
+$(document).on('click', '#sms_record_link', function() {
+    var num = $(this).data('number');
+    $('#sendsmsRcordNum').find('.modal-title b').text(num);
+    $('#sendsmsRcordNum').modal();
+});
 
 /*================end of send sms to whole school ====== */
 

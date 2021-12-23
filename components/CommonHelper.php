@@ -335,6 +335,15 @@ class CommonHelper extends Component {
         curl_setopt($ch, CURLOPT_POSTFIELDS, 'Username=03028501396&Password=123.123&From=NewIslamia&To=' . $mbl . '&Message=' . $msg);
         /* http://119.160.92.2:7700/sendsms_url.html?Username=0300xxxxxx&Password=xxxxxxxx&From=Mask&To=0300xxxxxxxx&Message=Text */
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+        // $url = 'https://www.smsgatewayhub.com/api/mt/SendSMS?APIKey='.$apikey.'&senderid='.$apisender.'&channel=2&DCS=0&flashsms=0&number='.$mbl.'&text='.$msg.'&route=1';
+        // //echo $url;
+        // $ch=curl_init($url);
+        // curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        // curl_setopt($ch,CURLOPT_POST,1);
+        // curl_setopt($ch,CURLOPT_POSTFIELDS,"");
+        // curl_setopt($ch, CURLOPT_RETURNTRANSFER,2);
+
         $server_output = curl_exec($ch);
         curl_close($ch);
 
@@ -345,9 +354,10 @@ class CommonHelper extends Component {
         $server_output;
         $smsModel->status = "$server_output";
         if ($smsModel->save()) {
-            //echo "saved";
+            return true;
         } else {
-            print_r($smsModel->getErrors());
+            // print_r($smsModel->getErrors());
+            return $smsModel->getErrors();
         }
 
 

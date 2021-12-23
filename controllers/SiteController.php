@@ -146,15 +146,20 @@ class SiteController extends Controller {
                         ->asArray()
                         ->all();
                 /* employee attedance array */
+
+                $smsLogQuery = Yii::$app->db->createCommand('SELECT * FROM sms_log WHERE fk_branch_id = '.Yii::$app->common->getBranch().' AND sent_date_time LIKE "%'.date('Y-m-d').'%" GROUP BY fk_user_id')->queryAll();
                 $attenance_emp_data = [];
                 foreach ($attendance_emp_query as $key => $attendance_emp_details) {
                     $attenance_emp_data['leave_type'][] = $attendance_emp_details['leave_type'];
                     $attenance_emp_data['total'][] = $attendance_emp_details['total'];
                 }
+
+
                 return $this->render('dashboard', [
                             'attendance_data' => $attenance_std_data,
                             'attendance_emp_data' => $attenance_emp_data,
                             'dashboard' => $dashboard,
+                            'log_num' => count($smsLogQuery)
                 ]);
             }
         } else {

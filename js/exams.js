@@ -84,6 +84,7 @@ $(document).on('click','#search-exam-dmc',function () {
                 if(result.status ==1){
                     var examType = singleDropdown.val();
                     var position = Array();
+                    $('.exportdmcs').html('');
                     if(result.tabId =='Single-Examination'){
                         $("#"+result.tabId).html(result.html);
                         var exportUrl = $('.exportdmcs').data('url');
@@ -95,7 +96,9 @@ $(document).on('click','#search-exam-dmc',function () {
                         var str_position = JSON.stringify(position);
 
                         var dataUrl = exportUrl+"?class_id="+classId+"&group_id="+groupId+"&section_id="+sectionId+"&exam_id="+examType+'&position=' + str_position;
-                        $('.exportdmcs').html('<a class="btn green-btn" href="'+dataUrl +'">Export & Print All DMC\'S</a>');
+                        var sendUrl = "class_id="+classId+" group_id="+groupId+" section_id="+sectionId+" exam_id="+examType+' position=' + str_position;
+                        var btnHTML = '<a class="btn green-btn" href="'+dataUrl +'">Export & Print All DMC\'S</a>\r\n<a class="btn green-btn" id="btn-announce-result" '+sendUrl +'>ANNOUNCE RESULT</a>';
+                        $('.exportdmcs').html(btnHTML);
                         $('.exportdmcs').show();
                         $('.export-classwise-resultsheet').hide();
                         $('ul.std-exam-list li a').first()[0].click();
@@ -236,4 +239,28 @@ $(document).on('click','#exam_std_list',function () {
         }
     });
 
+});
+
+$(document).on('click', '#btn-announce-result', function() {
+    $(".loading").css('position', 'absolute').show();
+    var url = $('#send_url').attr('data-url');
+    var class_id = $(this).attr('class_id');
+    var group_id = $(this).attr('group_id');
+    var section_id = $(this).attr('section_id');
+    var exam_id = $(this).attr('exam_id');
+    var position = $(this).attr('position');
+    $(".loading").css('display', 'block');
+    $.ajax
+    ({
+        type:"POST",
+        data: {
+            class_id:class_id,group_id:group_id,section_id:section_id,exam_id:exam_id,position:position
+        },
+        url:url,
+        success:function(response)
+        {
+            console.log(response);
+            $(".loading").css('display', 'none');
+        }
+    });
 });

@@ -18,6 +18,8 @@ use yii\filters\VerbFilter;
 use \yii\web\Response;
 use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
+use app\models\SmsLog;
+use app\models\StudentParentsInfo;
 use mPDF;
 
 /**
@@ -1213,6 +1215,105 @@ class ExamsController extends Controller
             }
         }
     }
+
+    /*export all dmc*/
+    public function actionSendAnnounceResult(){
+        if(Yii::$app->user->isGuest){
+            return $this->redirect('site/login');
+        }else{
+            if(Yii::$app->request->post()){
+                $data= Yii::$app->request->post();
+                $examid = $data['exam_id'];
+                $class_id = $data['class_id'];
+                $group_id = (isset($data['group_id']))?$data['group_id']:null;
+                $section_id = $data['section_id'];
+               
+                /*$student = Yii::$app->common->getStudent($data['stu_id']);*/
+                $branch_details = Yii::$app->common->getBranchDetail();
+                /*exam students*/
+                $exams_students = Exam::find()
+                    ->select([
+                        'st.stu_id','concat(u.first_name," ",u.middle_name," ",u.last_name) student_name'
+                    ])
+                    ->innerJoin('exam_type et','et.id=exam.fk_exam_type')
+                    ->innerJoin('ref_class c','c.class_id=exam.fk_class_id')
+                    ->innerJoin('subjects sb','sb.id=exam.fk_subject_id')
+                    ->leftJoin('student_marks sm','sm.fk_exam_id=exam.id')
+                    ->leftJoin('student_info st',' st.stu_id=sm.fk_student_id')
+                    ->leftJoin('ref_group g','g.group_id=exam.fk_group_id')
+                    ->leftJoin('ref_section s','s.class_id=exam.fk_class_id')
+                    ->innerJoin('user u','u.id=st.user_id')
+                    ->where(['et.id'=>$examid,'exam.fk_branch_id'=>Yii::$app->common->getBranch(),'c.class_id'=>$class_id,'g.group_id'=>($group_id)?$group_id:null,'s.section_id'=>$section_id])
+                    ->groupBy(['st.stu_id'])->asArray()->all();
+                
+                if(count($exams_students)>0){
+                    $resultsheet = Yii::$app->common->getCGSName($class_id,$group_id,$section_id).' - '.ucfirst($examid);
+                    $this->layout = 'pdf';
+                    //$mpdf = new mPDF('', 'A4');
+                    $mpdf = new mPDF('','', 0, '', 2, 2, 3, 3, 2, 2, 'A4');
+                    $position = json_decode($data['position']);
+                    $message = '';
+                    $smsModel = new SmsLog();
+                    $std_ids = Array();
+                    foreach($exams_students as $i => $students){
+                        $student = Yii::$app->common->getStudent($students['stu_id']);
+                        $subjects_data = Exam::find()
+                            ->select([
+                                'st.stu_id',
+                                'concat(u.first_name," ",u.last_name) student_name',
+                                'c.class_id',
+                                'c.title',
+                                'g.group_id',
+                                'g.title',
+                                's.section_id',
+                                's.title',
+                                'sb.title subject',
+                                'sum(exam.total_marks) total_marks',
+                                'sum(exam.passing_marks) passing_marks',
+                                'round(sum(sm.marks_obtained),2) marks_obtained'
+                            ])
+                            ->innerJoin('exam_type et','et.id=exam.fk_exam_type')
+                            ->innerJoin('ref_class c','c.class_id=exam.fk_class_id')
+                            ->innerJoin('subjects sb','sb.id=exam.fk_subject_id')
+                            ->leftJoin('student_marks sm','sm.fk_exam_id=exam.id')
+                            ->leftJoin('student_info st',' st.stu_id=sm.fk_student_id')
+                            ->leftJoin('ref_group g','g.group_id=exam.fk_group_id')
+                            ->leftJoin('ref_section s','s.class_id=exam.fk_class_id')
+                            ->innerJoin('user u','u.id=st.user_id')
+                            ->where(['exam.fk_branch_id'=>Yii::$app->common->getBranch(),'c.class_id'=>$class_id,'g.group_id'=>($group_id)?$group_id:null,'s.section_id'=>$section_id,'st.stu_id'=>$students['stu_id'],'et.id'=>$examid ])
+                            ->groupBy(['st.stu_id','c.class_id','c.title','g.group_id','g.title','s.section_id','s.title','sb.title'])->asArray()->all();
+                        $examtype = ExamType::findOne($examid);
+
+                        if(count($subjects_data)>0){
+                            $message .= 'Name: '.$subjects_data[0]['student_name'].'<br />';
+                            foreach ($subjects_data as $std_row) {
+                                $message .= 'Subject: '.$std_row['subject'].' Total Marks:'.$std_row['total_marks'].' Obtained Marks:'.$std_row['marks_obtained'].'<br />';
+                            }   
+                            $message .= '____________________________________<br />';
+                        }
+                        array_push($std_ids, $students['stu_id']);
+                    }
+
+                    foreach($std_ids as $each_std_id){
+                        $getparentcontact = StudentParentsInfo::find()->select('contact_no')->where(['stu_id' => $each_std_id])->one();
+                        if(!isset($getparentcontact->contact_no) || !$getparentcontact->contact_no){
+                            if(!$success){
+                                Yii::$app->session->setFlash('error', 'There is no parent contact phone number.');
+                                $this->redirect(['exams/dmc/index']);
+                                exit;
+                            }
+                        }
+
+                        $sendParentContact = $getparentcontact->contact_no;
+                        $success = Yii::$app->common->SendSms($sendParentContact, $message, $each_std_id);
+                    }
+                    echo true;
+                    exit;
+                }
+            }
+        }
+    }
+
 
     /*generate blank awardlist*/
     public function actionGenerateBlankAwardlist(){ 

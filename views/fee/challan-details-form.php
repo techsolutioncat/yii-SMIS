@@ -23,6 +23,7 @@ use app\models\FeeChallanRecord;
             echo  $form->field($feeTranscModel, 'id')->hiddenInput(['placeholder' => 'Transaction Amount'])->label(false);
             ?>
             <div class="table-responsive">
+                <input type="hidden" name="std_name" value="<?=ucfirst($query_std_plan['name'])?>">
                 <table class="table table-striped">
                     <thead>
                     <tr>

@@ -19,6 +19,8 @@ use app\models\FeePaymentMode;
 use app\models\search\FeeTransactionDetails;
 use app\models\StudentInfo;
 use app\models\User;
+use app\models\SmsLog;
+use app\models\StudentParentsInfo;
 use Yii;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
@@ -74,47 +76,47 @@ class FeeController extends Controller
                             'user.first_name'=>$data['search_string'],
                             'ftd.status'=> 1
                         ])/*->andWhere(['like','first_name',$data['search_string']])*/;
-                    $challan_no = FeeTransactionDetails::find()
-                        ->innerjoin('student_info si','si.stu_id = fee_transaction_details.stud_id')
-                        ->innerjoin('user u','u.id = si.user_id')
-                        ->where(['fee_transaction_details.fk_branch_id'=>Yii::$app->common->getBranch()])->andWhere(['like','fee_transaction_details.challan_no',$data['search_string'], 'ftd.status'=> 1]);
-		    $student_account = StudentInfo::find()->where(['fk_branch_id'=>Yii::$app->common->getBranch(),'acc_no'=>$data['search_string']])->one();
 
-                    if($username->count() > 0){
-                        $query = User::find()
-                            ->select(['si.stu_id','CONCAT(user.first_name," ",user.last_name) as  name','ftd.challan_no as challan_no','ftd.id as challan_id'])
-                            ->innerjoin('student_info si','si.user_id=user.id')
-                            ->innerjoin('fee_transaction_details ftd','ftd.stud_id=si.stu_id')
-                            ->where(['user.fk_branch_id'=>Yii::$app->common->getBranch(),'user.first_name'=>$data['search_string'], 'ftd.status'=> 1])/*->andWhere(['like','first_name',$data['search_string']])*/;
-                        $html = $this->renderAjax('get-fee-details',['query'=>$query->asArray()->all()]);
-                        return json_encode(['status'=>1,'details'=>$html]);
-                    }
-                    else if($challan_no->count() > 0){
-                        $query = FeeTransactionDetails::find()
-                            ->select(['si.stu_id','CONCAT(u.first_name," ",u.last_name) as  name','fee_transaction_details.challan_no as challan_no','fee_transaction_details.id as challan_id'])
+                        $challan_no = FeeTransactionDetails::find()
                             ->innerjoin('student_info si','si.stu_id = fee_transaction_details.stud_id')
                             ->innerjoin('user u','u.id = si.user_id')
-                            ->where([
-                                    'fee_transaction_details.fk_branch_id'=>Yii::$app->common->getBranch(),
-                                    'fee_transaction_details.status'=> 1
-                            ])
-                            ->andWhere([
-                                    'like','fee_transaction_details.challan_no', $data['search_string']
-                            ])->orderBy(['fee_transaction_details.id'=> SORT_DESC]);
-                        $html = $this->renderAjax('get-fee-details',['query'=>$query->asArray()->all()]);
-                        return json_encode(['status'=>1,'details'=>$html]);
+                            ->where(['fee_transaction_details.fk_branch_id'=>Yii::$app->common->getBranch()])->andWhere(['like','fee_transaction_details.challan_no',$data['search_string'], 'ftd.status'=> 1]);
+		                $student_account = StudentInfo::find()->where(['fk_branch_id'=>Yii::$app->common->getBranch(),'acc_no'=>$data['search_string']])->one();
 
-                    }else if(count($student_account)>0) {
-                        $query = User::find()
-                            ->select(['si.stu_id','CONCAT(user.first_name," ",user.last_name) as  name','ftd.challan_no as challan_no','ftd.id as challan_id'])
-                            ->innerjoin('student_info si','si.user_id=user.id')
-                            ->innerjoin('fee_transaction_details ftd','ftd.stud_id=si.stu_id')
-                            ->where(['si.fk_branch_id'=>Yii::$app->common->getBranch(),'si.stu_id'=>$student_account->stu_id, 'ftd.status'=> 1])/*->andWhere(['like','first_name',$data['search_string']])*/;
-                        $html = $this->renderAjax('get-fee-details',['query'=>$query->asArray()->all()]);
-                        return json_encode(['status'=>1,'details'=>$html]);
-                    }else{
-                        return json_encode(['status'=>0,'error'=>'<div class="alert alert-warning"><strong>Note!</strong>Challan not found.</div>']);
-                    }
+                        if($username->count() > 0){
+                            $query = User::find()
+                                ->select(['si.stu_id','CONCAT(user.first_name," ",user.last_name) as  name','ftd.challan_no as challan_no','ftd.id as challan_id'])
+                                ->innerjoin('student_info si','si.user_id=user.id')
+                                ->innerjoin('fee_transaction_details ftd','ftd.stud_id=si.stu_id')
+                                ->where(['user.fk_branch_id'=>Yii::$app->common->getBranch(),'user.first_name'=>$data['search_string'], 'ftd.status'=> 1])/*->andWhere(['like','first_name',$data['search_string']])*/;
+                            $html = $this->renderAjax('get-fee-details',['query'=>$query->asArray()->all()]);
+                            return json_encode(['status'=>1,'details'=>$html]);
+                        }else if($challan_no->count() > 0){
+                            $query = FeeTransactionDetails::find()
+                                ->select(['si.stu_id','CONCAT(u.first_name," ",u.last_name) as  name','fee_transaction_details.challan_no as challan_no','fee_transaction_details.id as challan_id'])
+                                ->innerjoin('student_info si','si.stu_id = fee_transaction_details.stud_id')
+                                ->innerjoin('user u','u.id = si.user_id')
+                                ->where([
+                                        'fee_transaction_details.fk_branch_id'=>Yii::$app->common->getBranch(),
+                                        'fee_transaction_details.status'=> 1
+                                ])
+                                ->andWhere([
+                                        'like','fee_transaction_details.challan_no', $data['search_string']
+                                ])->orderBy(['fee_transaction_details.id'=> SORT_DESC]);
+                            $html = $this->renderAjax('get-fee-details',['query'=>$query->asArray()->all()]);
+                            return json_encode(['status'=>1,'details'=>$html]);
+
+                        }else if(count($student_account)>0) {
+                            $query = User::find()
+                                ->select(['si.stu_id','CONCAT(user.first_name," ",user.last_name) as  name','ftd.challan_no as challan_no','ftd.id as challan_id'])
+                                ->innerjoin('student_info si','si.user_id=user.id')
+                                ->innerjoin('fee_transaction_details ftd','ftd.stud_id=si.stu_id')
+                                ->where(['si.fk_branch_id'=>Yii::$app->common->getBranch(),'si.stu_id'=>$student_account->stu_id, 'ftd.status'=> 1])/*->andWhere(['like','first_name',$data['search_string']])*/;
+                            $html = $this->renderAjax('get-fee-details',['query'=>$query->asArray()->all()]);
+                            return json_encode(['status'=>1,'details'=>$html]);
+                        }else{
+                            return json_encode(['status'=>0,'error'=>'<div class="alert alert-warning"><strong>Note!</strong>Challan not found.</div>']);
+                        }
                 }
             }
             else{
@@ -290,6 +292,44 @@ class FeeController extends Controller
                         print_r($sundry_account_details);
                         exit;*/
                         if($feeTranscModel->load(Yii::$app->request->post())){
+                            // ============END SEND MESSAGE TO STUDENTS PARENTS =========================//
+                            $success = false;
+                            $post_data = Yii::$app->request->post();
+                            $fee_head_ids = array_keys($post_data['transaction_head_arrears_amount']);
+                            $message = '';
+                            if(!empty($fee_head_ids)){
+                                $message .= 'name: '.$post_data['std_name']."<br />";
+                                foreach ($fee_head_ids as $id) {
+                                    $row = yii::$app->db->createCommand("SELECT title FROM fee_heads WHERE id = ".$id)->queryOne();
+                                    $message .= $row['title'].': '.'Rs.'.$post_data['transaction_head_amount'][$id]."<br />";
+                                }
+                                $message .= '-------------------------------<br />';
+                                $message .= 'Pay Amount: Rs.'.$post_data['FeeTransactionDetails']['transaction_amount']."<br />";
+                                $message .= '-------------------------------<br />';
+                                $message .= 'Manual Receipt #: '.$post_data['FeeTransactionDetails']['manual_recept_no']."<br />";
+                                $message .= 'Transaction Date: '.$post_data['FeeTransactionDetails']['transaction_date'];
+
+                                $student_row_data = yii::$app->db->createCommand("SELECT stud_id FROM fee_transaction_details WHERE id = ".$post_data['FeeTransactionDetails']['id'])->queryOne();
+                                $studentId = $student_row_data['stud_id'];
+                                $smsModel = new SmsLog();
+                                $getparentcontact = StudentParentsInfo::find()->select('contact_no')->where(['stu_id' => $studentId])->one();
+                                
+                                if(!isset($getparentcontact->contact_no) || !$getparentcontact->contact_no){
+                                    if(!$success){
+                                        Yii::$app->session->setFlash('error', 'There is no parent contact phone number.');
+                                        $this->redirect(['fee/index']);
+                                        exit;
+                                    }
+                                }
+                                $sendParentContact = $getparentcontact->contact_no;
+                                $success = Yii::$app->common->SendSms($sendParentContact, $message, $studentId);
+                            }
+                            // ============END SEND MESSAGE TO STUDENTS PARENTS =========================//
+                            if(!$success){
+                                Yii::$app->session->setFlash('error', 'Transaction error');
+                                $this->redirect(['fee/index']);
+                                exit;
+                            }
 
                             $new_opening_balance        = $old_opening_bal - $feeTranscModel->transaction_amount;
                             $new_transection_amt        = $old_transectionamt+$feeTranscModel->transaction_amount;
@@ -533,8 +573,7 @@ class FeeController extends Controller
                         return json_encode(['status'=>1 ,'details'=>$details]);
                     }
                     else{
-                        return json_encode(['status'=>1,'details'=>'<div class="alert alert-warning">
-  <strong>Note!</strong>Record Not Found.</div>']);
+                        return json_encode(['status'=>1,'details'=>'<div class="alert alert-warning"><strong>Note!</strong>Record Not Found.</div>']);
                     }
                 }
                 else{
@@ -623,8 +662,7 @@ class FeeController extends Controller
                         return json_encode(['status'=>1 ,'details'=>$details]);
                     }
                     else{
-                        return json_encode(['status'=>1,'details'=>'<div class="alert alert-warning">
-  <strong>Note!</strong>Record Not Found.</div>']);
+                        return json_encode(['status'=>1,'details'=>'<div class="alert alert-warning"><strong>Note!</strong>Record Not Found.</div>']);
                     }
                 }
                 else{
@@ -915,7 +953,7 @@ class FeeController extends Controller
         }
     }
 
-/*generate fee challan monthly*/
+   /*generate fee challan monthly*/
     public function actionGenerateMonthlyChallan(){
         if (Yii::$app->user->isGuest) {
             return  $this->redirect(['site/login']);
@@ -927,7 +965,7 @@ class FeeController extends Controller
                 $due_date          = date('Y-m-'.Yii::$app->common->getBranchSettings()->fee_due_date);
                 /*get all students against the selected class id, group_id and section_id*/
                  
-		if(!empty($data['section_id'])){
+		        if(!empty($data['section_id'])){
                     $where = ['class_id'=>$data['class_id'],'group_id'=>($data['group_id'])?$data['group_id']:null,'section_id'=>$data['section_id'],'is_active'=>1];
                 }else{
                     $where = ['class_id'=>$data['class_id'],'group_id'=>($data['group_id'])?$data['group_id']:null,'is_active'=>1];
@@ -988,7 +1026,7 @@ class FeeController extends Controller
                             /*plan is matured or greater than the given plan*/
                             if($plan_month_counter >= $plan_counter){
                                 $total_multiplyer =  floor($plan_month_counter/$plan_counter);
-				if($total_multiplyer>0){
+				                if($total_multiplyer>0){
                                     //echo $student->stu_id."<br/>";
                                     // returns timestamp
                                     $fee_generation_strtotime = strtotime("+".($total_multiplyer*$plan_counter)." months", strtotime($student->fee_generation_date));
@@ -1008,11 +1046,11 @@ class FeeController extends Controller
                                 $stop_id            = $student->fk_stop_id;
                                 $is_hostel_avail    = $student->is_hostel_avail;
                                 $transport_hostel_received=[];
-$sum_total=0;
- $discount_amount=0; 
-$transport_fare=0;
-$hostel_fare=0;
-                                
+                                $sum_total=0;
+                                $discount_amount=0; 
+                                $transport_fare=0;
+                                $hostel_fare=0;
+                                                                
                                 $transport_fare=0;
                                 $hostel_fare=0;
                                 $fee_plan_Model = FeePlanType::findOne($std_plan_type);  
@@ -1091,15 +1129,15 @@ $hostel_fare=0;
 
  
 
-				 /*sumtotal*/
-				 $sum_total      =  $store_array_particular[$student->stu_id]['total_head_amount'][0];
-				 $transport_fare =  $store_array_particular[$student->stu_id]['transport_fare'][0];
-				 $hostel_fare    =  $store_array_particular[$student->stu_id]['hostel_fare'][0];
-                                /*echo "<pre>";
-                                print_r($store_array_particular);
-				echo "<br/>";
-				echo $sum_total." ".$transport_fare." ".$hostel_fare; 
-if($student->stu_id==35){exit;}else{continue;}   */
+                                /*sumtotal*/
+                                $sum_total      =  $store_array_particular[$student->stu_id]['total_head_amount'][0];
+                                $transport_fare =  $store_array_particular[$student->stu_id]['transport_fare'][0];
+                                $hostel_fare    =  $store_array_particular[$student->stu_id]['hostel_fare'][0];
+                                                /*echo "<pre>";
+                                                print_r($store_array_particular);
+                                echo "<br/>";
+                                echo $sum_total." ".$transport_fare." ".$hostel_fare; 
+                                if($student->stu_id==35){exit;}else{continue;}   */
                                 //echo $sum_total.' transport: '.$transport_fare.' discount_amount: '.$discount_amount.'<br/>';
                                 /*inactive previous challan from FTD, FCP And Fee Challan Record.*/
                                 $update_challan_inactive = "UPDATE fee_transaction_details  SET status = 0 WHERE fk_branch_id = ".Yii::$app->common->getBranch()." and stud_id =".$student->stu_id;
@@ -1421,8 +1459,7 @@ if($student->stu_id==35){exit;}else{continue;}   */
                                     $fee_generation_date = date('Y-m-01',$fee_generation_strtotime); // formatted version
 
                                 }
-                                /*echo "+".($total_multiplyer*$plan_counter)." months" .($student->fee_generation_date)."<br/>";
-  */
+                                /*echo "+".($total_multiplyer*$plan_counter)." months" .($student->fee_generation_date)."<br/>";*/
                                 //echo $student->fee_generation_date.'  '.$fee_generation_date."<br/>";exit;
 
                                 $fetch_std_data_query = FeeHeads::find()->select([
@@ -1857,12 +1894,12 @@ if($student->stu_id==35){exit;}else{continue;}   */
                                     $total_multiplyer,
                                     $sundry_account,
                                     $sundry_hosel_transport){
-        $exteraHeadArrayMap = \app\models\FeeHeads::find()->select(['id','title'])->where(['fk_branch_id'=>Yii::$app->common->getBranch(),'extra_head'=>1])->asArray()->all();
-        $discount_type= ArrayHelper::map(\app\models\FeeDiscountTypes::find()->where(['fk_branch_id'=>Yii::$app->common->getBranch(),'is_active'=>1])->all(),'id','title');
-if(count($sundry_account) > 0 ) {
-    $sundary_list= ArrayHelper::map($sundry_account,'fk_head_id','total_advance_bal');
-}
-?>
+                                            $exteraHeadArrayMap = \app\models\FeeHeads::find()->select(['id','title'])->where(['fk_branch_id'=>Yii::$app->common->getBranch(),'extra_head'=>1])->asArray()->all();
+                                            $discount_type= ArrayHelper::map(\app\models\FeeDiscountTypes::find()->where(['fk_branch_id'=>Yii::$app->common->getBranch(),'is_active'=>1])->all(),'id','title');
+                                    if(count($sundry_account) > 0 ) {
+                                        $sundary_list= ArrayHelper::map($sundry_account,'fk_head_id','total_advance_bal');
+                                    }
+                                    ?>
  
  
             <?php
@@ -1936,7 +1973,7 @@ if(count($sundry_account) > 0 ) {
                         /*if fee challan record amount is empoty that it will get head amount from actual heads.*/
                         if($items['one_time'] == 1){
                             //$amount = $items['amount']* $items['no_months'];
-                $amount = 0; 
+                        $amount = 0; 
                             $totalHeadAmt_without_currency  =  $amount;
                         }else{
                             if($total_multiplyer > 0){
@@ -1956,7 +1993,7 @@ if(count($sundry_account) > 0 ) {
                                         }
                                     }else{
                                         //$amount = $items['amount']*$items['no_months'];
-                    if($feeHeadWise_received>0){
+                        if($feeHeadWise_received>0){
                                                 $amount = 0;
                         }else{
                             $amount  = $amount = $items['amount']* $items['no_months'];
@@ -1987,7 +2024,7 @@ if(count($sundry_account) > 0 ) {
                                         $stu_reg_log = \app\models\StuRegLogAssociation::find()->where(['fk_stu_id'=>$student_data->stu_id,'fk_branch_id'=>Yii::$app->common->getBranch()])->count();
                                        if($stu_reg_log > 0){
                                            //$amount = $items['amount']*$items['no_months'];
-$amount = 0;
+                                            $amount = 0;
                                        }else{
                                            $amount = 0;
                                        }

@@ -3,7 +3,17 @@ use yii\helpers\Url;
 use yii\bootstrap\Modal;
 use kartik\select2\Select2;
 use yii\widgets\ActiveForm;
+
+$this->registerCssFile( Yii::getAlias('@web/css/students/import-students.css'));
 ?>
+
+<div class="loading" style="display: none;">
+  <div class="loadingWrapper">
+    <div id="loading"> </div>
+    <h1>Loading . . .</h1>
+  </div>
+</div>
+
 <div class="reports_wrap ">
     <ul class="nav nav-pills">
         <li ><a data-toggle="tab" href="#Single-Examination">Single Examination</a></li>
@@ -29,6 +39,7 @@ use yii\widgets\ActiveForm;
 <div class="exportdmcs" data-url="<?=Url::to('export-all-dmc')?>">
 	<!--<a class="btn green-btn" href="javascript:void(0);" >Export & Print All DMC'S</a>-->
 </div>
+<div id="send_url" data-url="<?php echo Url::to(['exams/send-announce-result'])?>"></div>
 <?php
 
 Modal::begin([

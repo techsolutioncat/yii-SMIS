@@ -3,6 +3,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\bootstrap\Modal;
 use yii\widgets\Pjax;
+$this->registerCssFile( Yii::getAlias('@web/css/students/import-students.css'));
 
 /* @var $this yii\web\View */
 
@@ -35,6 +36,7 @@ if(Yii::$app->user->identity->fk_role_id != 3) {
 
                         <div class="widget g-border" id="pallet-no-<?= $dashboard_item->id ?>"
                              style="<?= ($dashboard_item->status == 0) ? 'display:none;' : '' ?>">
+
                             <div class="wed-head">
                                 <a href="javascript:void(0);" data-toggle="collapse" data-target="#widget<?= $key ?>">
                                     <?= $dashboard_item->title ?>
@@ -49,6 +51,22 @@ if(Yii::$app->user->identity->fk_role_id != 3) {
                             <div class="wed-body collapse" id="widget<?= $key ?>">
                                 <?= $dashboard_item->details ?>
                             </div>
+                            <?php
+                                if($dashboard_item->id == 1) {
+                            ?>
+                            <div class="wed-head" style="min-height: 0px;padding-bottom: 5px;padding-top: 0px;">
+                                <a href="javascript:void(0);" id="sms_to_branch" >
+                                    SMS to Branch
+                                </a>
+                            </div>
+                            <div class="wed-head" style="min-height: 0px;padding-bottom: 25px;padding-top: 0px;">
+                                <a href="javascript:void(0);" id="sms_record_link" data-number="<?php echo $log_num;?>">
+                                    <?php echo Url::to(['analysis/send-whole-school']) ?>
+                                </a>
+                            </div>
+                            <?php 
+                                }
+                            ?>
                         </div>
 
                         <?php
@@ -203,7 +221,12 @@ if(Yii::$app->user->identity->fk_role_id != 3) {
 ?>
 
 
-
+<div class="loading">
+  <div class="loadingWrapper">
+    <div id="loading"> </div>
+    <h1>Sending . . .</h1>
+  </div>
+</div>
 
 <div class="container">
   
@@ -221,11 +244,10 @@ if(Yii::$app->user->identity->fk_role_id != 3) {
           <h4 class="modal-title">Send Sms To Whole School</h4>
         </div>
         <div class="modal-body">
-          <p>
-              <textarea class="form-control" name="smsWhole" id="smsWholeSchool"></textarea>
-          </p>
-              <input type="button" data-dismiss="modal" id="sendsmsWholeschools" class="btn btn-primary" value="Send" data-url=<?php echo Url::to(['analysis/send-whole-school'])?>>
-
+            <p>
+                <textarea class="form-control" name="smsWhole" id="smsWholeSchool"></textarea>
+            </p>
+            <a href="Javascript:;" id="sendsmsWholeschools" class="btn btn-primary" data-url=<?php echo Url::to(['analysis/send-whole-school']) ?> ?>Send</a>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -235,6 +257,21 @@ if(Yii::$app->user->identity->fk_role_id != 3) {
       
     </div>
   </div>
-  
+
+</div>
+
+ <!-- Modal -->
+ <div class="modal fade" id="sendsmsRcordNum" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+    <?php Pjax::begin(['id' => 'pjax-container']) ?>
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">The numbers of text sent in this month: <b class="number"></b></h4>
+        </div>
+    </div>
+    <?php Pjax::end() ?>
+    </div>
 </div>
 
