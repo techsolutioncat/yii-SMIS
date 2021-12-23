@@ -24,4 +24,15 @@ $(document).ready(function() {
       
     $(".loading").show();
   });
+
+
+  var success_flag = $('#success_flag').val();
+  if(success_flag == '1'){
+    $('#msg_modal .alert-error').css('display', 'none');
+    $('#msg_modal').modal();
+  }
+  if(success_flag == '2'){
+    $('#msg_modal .alert-success').css('display', 'none');
+    $('#msg_modal').modal();
+  }
 });

@@ -39,3 +39,29 @@ $model = new app\models\UploadExcelForm();
         </div>
     </div>
 </div>
+
+<input type="hidden" id="success_flag" value="<?php echo $success_flag;?>" />
+ <!-- Modal -->
+ <div class="modal fade" id="msg_modal" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-boday">
+            
+                <div class="box"> 
+                    <div class="success alert alert-success">
+                        <div class="alert-body">
+                        Success !
+                        </div>
+                    </div>
+                        <div class="error alert alert-error">
+                        <div class="alert-body">
+                            Error !
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

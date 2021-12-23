@@ -2665,7 +2665,7 @@ class StudentController extends Controller {
 
         $ok = 0;
         // print_r($model->load(Yii::$app->request->post()));exit;
-        if ($model->load(Yii::$app->request->post())) {
+        if ($model->load(Yii::$app->request->post()) && UploadedFile::getInstance($model,'file')) {
             $file = UploadedFile::getInstance($model,'file');
 
             if ($file) {
@@ -2684,7 +2684,7 @@ class StudentController extends Controller {
 
                     
                     
-if (1 < $total_line) {
+                    if (1 < $total_line) {
                         for ($row = 2;$row <= $total_line;$row++) {
                             $data = [];
 
@@ -2741,14 +2741,23 @@ if (1 < $total_line) {
                         unlink($filename);
 
                     if ($ok == 1) {
-                        return $this->redirect('import-students');
+                        return $this->render( 'import-students', [
+                            'model' => $model, 
+                            'success_flag' => '1']
+                        );
                     } else {
-                        Echo "< script > alert ('operation failed '); window.history.back ();</script>";
+                        return $this->render( 'import-students', [
+                            'model' => $model, 
+                            'success_flag' => '2']
+                        );
                     }
                 }
             }
         } else {
-            return $this->render('import-students',['model' => $model]);
+            return $this->render( 'import-students', [
+                'model' => $model, 
+                'success_flag' => '0']
+            );
         }
     }
 }
