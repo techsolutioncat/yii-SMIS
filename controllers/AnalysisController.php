@@ -672,7 +672,7 @@ class AnalysisController extends Controller
             $success = Yii::$app->common->SendSms($sendParentContact, $textArea, $stu_id);
         }       
 
-        $this->redirect('./');
+        return $this->render('index');
         echo true;
         exit;
     } //end of function

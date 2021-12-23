@@ -3324,7 +3324,7 @@ $(document).on('click', '#sms_to_branch', function() {
     smsModal.modal();
 });
 
-$(".loading").hide();
+$(".loading").css("display", "none");
 
 $(document).on('click','#sendsmsWholeschools',function(){
     var textarea = $('#smsWholeSchool').val();
@@ -3336,6 +3336,7 @@ $(document).on('click','#sendsmsWholeschools',function(){
     }
     $('#sendsmsWhole').hide();
     $(".loading").css('top', '0px').show();
+    $(".loading").css("display", "block");
     $.ajax({
         type: "POST",
         data: {textarea:textarea},
@@ -3343,6 +3344,7 @@ $(document).on('click','#sendsmsWholeschools',function(){
         success: function(success){
             if(success){
                 $(".loading").hide();
+                window.location.href=$('#redirect_url').val();
             }
         }
     });

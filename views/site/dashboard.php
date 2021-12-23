@@ -33,9 +33,8 @@ if(Yii::$app->user->identity->fk_role_id != 3) {
                     }
                     if ($dashboard_item->type == 'links') {
                         ?>
-
                         <div class="widget g-border" id="pallet-no-<?= $dashboard_item->id ?>"
-                             style="<?= ($dashboard_item->status == 0) ? 'display:none;' : '' ?>">
+                             style="<?= ($dashboard_item->status == 'active') ? 'display:none;' : '' ?>">
 
                             <div class="wed-head">
                                 <a href="javascript:void(0);" data-toggle="collapse" data-target="#widget<?= $key ?>">
@@ -220,8 +219,8 @@ if(Yii::$app->user->identity->fk_role_id != 3) {
 }
 ?>
 
-
-<div class="loading">
+<input type="hidden" id="redirect_url" value="<?php echo Url::to('site') ?>" />
+<div class="loading" style="display: none;">
   <div class="loadingWrapper">
     <div id="loading"> </div>
     <h1>Sending . . .</h1>
