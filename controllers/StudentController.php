@@ -2647,8 +2647,8 @@ class StudentController extends Controller {
     public function actionImportStudents()
     {
         $model = new UploadExcelForm();
-        if (Yii::$app->request->isPost) {
-            $model->file = UploadedFile::getInstance($model,'file');
+        // if (Yii::$app->request->isPost) {
+        //     $model->file = UploadedFile::getInstance($model,'file');
             //      if ($model->upload()) {
             //        print <<<EOT
             //< script > alert ('upload succeeded ') < / script >
@@ -2658,17 +2658,19 @@ class StudentController extends Controller {
             //< script > alert ('upload failed ') < / script >
             //EOT;
             //}
-            if (!$model->upload()) {
-                print "< script > alert ('upload failed ') < / script >";
-            }   
-        }
+        //     if (!$model->upload()) {
+        //         print "< script > alert ('upload failed ') < / script >";
+        //     }   
+        // }
 
         $ok = 0;
+        $success_flag = '0';
         // print_r($model->load(Yii::$app->request->post()));exit;
-        if ($model->load(Yii::$app->request->post()) && UploadedFile::getInstance($model,'file')) {
+        if ($model->load(Yii::$app->request->post())) {
             $file = UploadedFile::getInstance($model,'file');
+            $file_flag = Yii::$app->request->post('file_flag');
 
-            if ($file) {
+            if ($file && $file_flag == '1') {
                 $tmp_file = date('YmdHis') . '.' . $file->extension; // $file->name;
                 $path = 'uploads/excel/';
                 $filename = $path . $tmp_file;
@@ -2741,24 +2743,18 @@ class StudentController extends Controller {
                         unlink($filename);
 
                     if ($ok == 1) {
-                        return $this->render( 'import-students', [
-                            'model' => $model, 
-                            'success_flag' => '1']
-                        );
+                        $success_flag = '1';
                     } else {
-                        return $this->render( 'import-students', [
-                            'model' => $model, 
-                            'success_flag' => '2']
-                        );
+                        $success_flag = '2';
                     }
                 }
             }
-        } else {
-            return $this->render( 'import-students', [
-                'model' => $model, 
-                'success_flag' => '0']
-            );
         }
+        return $this->render( 'import-students', [
+            'model' => $model, 
+            'success_flag' => $success_flag
+            ]
+        );
     }
 }
 // end of main class

@@ -21,7 +21,8 @@ $(document).ready(function() {
     const selectedFile = document.getElementById('uploadexcelform-file').files[0];
     if(!selectedFile)
       return;
-      
+    
+    $('#file_flag').val('1');
     $(".loading").show();
   });
 

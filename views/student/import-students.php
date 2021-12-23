@@ -1,6 +1,7 @@
 <?php
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use yii\helpers\Url;
 
 $this->registerCssFile( Yii::getAlias('@web/css/students/import-students.css'));
 $this->registerJsFile(Yii::getAlias('@web').'/js/students/import-students.js',['depends' => [yii\web\JqueryAsset::className()]]);
@@ -31,6 +32,7 @@ $model = new app\models\UploadExcelForm();
                     ?>
                     <?= $form->field($model,'file')->fileInput(['multiple'=>'multiple', 'accept'=>'application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'onchange'=>'checkfile(this);']) ?>
                     
+                    <input type="hidden" name="file_flag" id="file_flag" value="0">
                     <div class="form-group">
                         <?= Html::submitButton('Submit', ['class' => 'btn green-btn', 'id' => 'btn_import_data']) ?>
                     <?php ActiveForm::end() ?>
@@ -42,7 +44,7 @@ $model = new app\models\UploadExcelForm();
 
 <input type="hidden" id="success_flag" value="<?php echo $success_flag;?>" />
  <!-- Modal -->
- <div class="modal fade" id="msg_modal" role="dialog">
+ <div class="modal fade" id="msg_modal" role="dialog" data-backdrop="static" tabindex="-1">
     <div class="modal-dialog">
         <!-- Modal content-->
         <div class="modal-content">
@@ -61,6 +63,9 @@ $model = new app\models\UploadExcelForm();
                     </div>
                 </div>
 
+            </div>
+            <div class="modal-footer">
+                <a type="button" class="btn btn-default" href="<?=Url::to(['student/import-students']) ?>">Close</a>
             </div>
         </div>
     </div>
