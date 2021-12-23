@@ -655,10 +655,14 @@ class AnalysisController extends Controller
 
         foreach ($stuQuery as $query){
             //Send sms to students
-            $contct= $query['contact'];
+            $student = Yii::$app->common->getStudent($query['stu_id']);
+            $contct= $student['contact_no'];
             $stu_id= $query['stu_id'];
-            Yii::$app->common->SendSms($contct,$textArea,$stu_id);
-          
+            
+            if($contct != "") {
+                Yii::$app->common->SendSms($contct,$textArea,$stu_id);
+            }
+
             //Send sms to parents
             $getparentcontact = StudentParentsInfo::find()->select('contact_no')->where(['stu_id' => $stu_id])->one();
             if(!isset($getparentcontact->contact_no) || !$getparentcontact->contact_no){

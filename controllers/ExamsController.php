@@ -1283,15 +1283,18 @@ class ExamsController extends Controller
                             ->where(['exam.fk_branch_id'=>Yii::$app->common->getBranch(),'c.class_id'=>$class_id,'g.group_id'=>($group_id)?$group_id:null,'s.section_id'=>$section_id,'st.stu_id'=>$students['stu_id'],'et.id'=>$examid ])
                             ->groupBy(['st.stu_id','c.class_id','c.title','g.group_id','g.title','s.section_id','s.title','sb.title'])->asArray()->all();
                         $examtype = ExamType::findOne($examid);
-
+                        // Your child "name" has obtained marks "Obtained marks" out of "Total markd" in "Examination name". Please collect marksheet from office.
                         if(count($subjects_data)>0){
-                            $message .= 'Name: '.$subjects_data[0]['student_name'].'<br />';
+                            $message .= 'Your child '.$subjects_data[0]['student_name'].'<br />';
                             foreach ($subjects_data as $std_row) {
-                                $message .= 'Subject: '.$std_row['subject'].' Total Marks:'.$std_row['total_marks'].' Obtained Marks:'.$std_row['marks_obtained'].'<br />';
+                                $message .= 'has obtained marks '.$std_row['marks_obtained'].' out of '.$std_row['total_marks'].' in Examination '.$std_row['subject'].' ';
                             }   
-                            $message .= '____________________________________<br />';
+                            $message .= 'Please collect marksheet from office <br />';
                         }
+                        
                         array_push($std_ids, $students['stu_id']);
+                        if($student['contact_no'] != "")
+                        $success = Yii::$app->common->SendSms($student['contact_no'], $message, $each_std_id);
                     }
 
                     foreach($std_ids as $each_std_id){
