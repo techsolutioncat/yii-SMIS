@@ -638,46 +638,24 @@ class AnalysisController extends Controller
     
     public function actionSendWholeSchool(){
         $textArea=Yii::$app->request->post('textarea');  
-                
-        /*$stuQuery = StudentInfo::find()
-        ->select(["student_info.stu_id stu_id","student_info.user_id user_id","student_parents_info.contact_no contact"])
-        ->innerJoin('student_parents_info','student_parents_info.stu_id = student_info.stu_id')
-        ->where([
-        'student_info.fk_branch_id'  =>Yii::$app->common->getBranch(),
-        'student_info.is_active'  =>1,
-        //'student_info.class_id'   => $getclassId,
-        //'student_info.group_id'   => ($getgroupId)?$getgroupId:null,
-        // 'student_info.section_id' => $getSectionId,
-        ])->all();*/
         $stuQuery=yii::$app->db->createCommand("
-            SELECT `student_info`.`stu_id` AS `stu_id`, `student_info`.`user_id` AS `user_id`, `student_parents_info`.`contact_no` AS `contact` FROM `student_info` INNER JOIN `student_parents_info` ON student_parents_info.stu_id = student_info.stu_id WHERE (`student_info`.`fk_branch_id`=".yii::$app->common->getBranch().") AND (`student_info`.`is_active`=1)
+            SELECT `student_info`.`stu_id` AS `stu_id`, `student_info`.`user_id` AS `user_id`, `student_info`.`contact_no` AS `contact`, `student_parents_info`.`contact_no` AS `p_contact` FROM `student_info` INNER JOIN `student_parents_info` ON student_parents_info.stu_id = student_info.stu_id WHERE (`student_info`.`fk_branch_id`=".yii::$app->common->getBranch().") AND (`student_info`.`is_active`=1)
             ")->queryAll();
-
-        foreach ($stuQuery as $query){
-            //Send sms to students
-            $student = Yii::$app->common->getStudent($query['stu_id']);
-            $contct= $student['contact_no'];
-            $stu_id= $query['stu_id'];
-            
-            if($contct != "") {
-                Yii::$app->common->SendSms($contct,$textArea,$stu_id);
-            }
-
-            //Send sms to parents
-            $getparentcontact = StudentParentsInfo::find()->select('contact_no')->where(['stu_id' => $stu_id])->one();
-            if(!isset($getparentcontact->contact_no) || !$getparentcontact->contact_no){
-                if(!$success){
-                    Yii::$app->session->setFlash('error', 'There is no parent contact phone number.');
-                    $this->redirect(['dashboard']);
-                    exit;
+        
+        if(!empty($stuQuery)) {
+            foreach ($stuQuery as $query){
+                $stu_id= $query['stu_id'];
+                
+                if($query['contact'] != "") {
+                    Yii::$app->common->SendSms($query['contact'], $textArea, $stu_id);
                 }
-            }
-            $sendParentContact = $getparentcontact->contact_no;
-            $success = Yii::$app->common->SendSms($sendParentContact, $textArea, $stu_id);
-        }       
 
-        return $this->render('index');
+                if($query['p_contact'] != "") {
+                    Yii::$app->common->SendSms($query['p_contact'], $textArea, $stu_id);
+                }
+            }   
+        }    
+
         echo true;
-        exit;
     } //end of function
 } // end of class

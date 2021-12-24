@@ -904,9 +904,9 @@ class ExamsController extends Controller
                             }
                             $stdMarks = $totalStdObtainMarks;
 
-                            if($counter > 4){
-                                break;
-                            }
+                            // if($counter > 4){
+                            //     break;
+                            // }
                         }
                         //echo Yii::$app->common->multidimensional_search($position, ['student_id'=>276]);
                         $query_data = [];
@@ -1252,10 +1252,10 @@ class ExamsController extends Controller
                     //$mpdf = new mPDF('', 'A4');
                     $mpdf = new mPDF('','', 0, '', 2, 2, 3, 3, 2, 2, 'A4');
                     $position = json_decode($data['position']);
-                    $message = '';
                     $smsModel = new SmsLog();
                     $std_ids = Array();
                     foreach($exams_students as $i => $students){
+                        $message = '';
                         $student = Yii::$app->common->getStudent($students['stu_id']);
                         $subjects_data = Exam::find()
                             ->select([
@@ -1285,31 +1285,38 @@ class ExamsController extends Controller
                         $examtype = ExamType::findOne($examid);
                         // Your child "name" has obtained marks "Obtained marks" out of "Total markd" in "Examination name". Please collect marksheet from office.
                         if(count($subjects_data)>0){
-                            $message .= 'Your child '.$subjects_data[0]['student_name'].'<br />';
+                            $message .= 'Your child '.$subjects_data[0]['student_name'];
                             foreach ($subjects_data as $std_row) {
-                                $message .= 'has obtained marks '.$std_row['marks_obtained'].' out of '.$std_row['total_marks'].' in Examination '.$std_row['subject'].' ';
+                                $message .= ' has obtained marks '.$std_row['marks_obtained'].' out of '.$std_row['total_marks'].' in Examination '.$std_row['subject'].' ';
                             }   
                             $message .= 'Please collect marksheet from office <br />';
                         }
                         
                         array_push($std_ids, $students['stu_id']);
-                        if($student['contact_no'] != "")
-                        $success = Yii::$app->common->SendSms($student['contact_no'], $message, $each_std_id);
-                    }
-
-                    foreach($std_ids as $each_std_id){
-                        $getparentcontact = StudentParentsInfo::find()->select('contact_no')->where(['stu_id' => $each_std_id])->one();
-                        if(!isset($getparentcontact->contact_no) || !$getparentcontact->contact_no){
-                            if(!$success){
-                                Yii::$app->session->setFlash('error', 'There is no parent contact phone number.');
-                                $this->redirect(['exams/dmc/index']);
-                                exit;
-                            }
+                        if($student['contact_no'] != "") {
+                            $success = Yii::$app->common->SendSms($student['contact_no'], $message, $students['stu_id']);
                         }
 
+                        $getparentcontact = StudentParentsInfo::find()->select('contact_no')->where(['stu_id' => $students['stu_id']])->one();
                         $sendParentContact = $getparentcontact->contact_no;
-                        $success = Yii::$app->common->SendSms($sendParentContact, $message, $each_std_id);
+                        if($sendParentContact != "") {
+                            $success = Yii::$app->common->SendSms($sendParentContact, $message, $students['stu_id']);
+                        }
                     }
+
+                    // foreach($std_ids as $each_std_id){
+                    //     $getparentcontact = StudentParentsInfo::find()->select('contact_no')->where(['stu_id' => $each_std_id])->one();
+                    //     if(!isset($getparentcontact->contact_no) || !$getparentcontact->contact_no){
+                    //         if(!$success){
+                    //             Yii::$app->session->setFlash('error', 'There is no parent contact phone number.');
+                    //             $this->redirect(['exams/dmc/index']);
+                    //             exit;
+                    //         }
+                    //     }
+
+                    //     $sendParentContact = $getparentcontact->contact_no;
+                    //     $success = Yii::$app->common->SendSms($sendParentContact, $message, $each_std_id);
+                    // }
                     echo true;
                     exit;
                 }
