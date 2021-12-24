@@ -1284,12 +1284,24 @@ class ExamsController extends Controller
                             ->groupBy(['st.stu_id','c.class_id','c.title','g.group_id','g.title','s.section_id','s.title','sb.title'])->asArray()->all();
                         $examtype = ExamType::findOne($examid);
                         // Your child "name" has obtained marks "Obtained marks" out of "Total markd" in "Examination name". Please collect marksheet from office.
+                        
+                        $tottal_marks = 0;
+                        $tottal_obtained = 0;
+                        $tottal_percentage = 0.00;
                         if(count($subjects_data)>0){
-                            $message .= 'Your child '.$subjects_data[0]['student_name'];
                             foreach ($subjects_data as $std_row) {
-                                $message .= ' has obtained marks '.$std_row['marks_obtained'].' out of '.$std_row['total_marks'].' in Examination '.$std_row['subject'].' ';
+                                $message .= 'Your child "'.$subjects_data[0]['student_name']. '" ';
+                                $message .= ' has obtained marks "'.$std_row['marks_obtained'].'" out of "'.$std_row['total_marks'].'" in Examination "'.$std_row['subject'].'" ';
+                                $message .= 'Please collect marksheet from office. <br />';
+                                $tottal_marks = $tottal_marks + $std_row['total_marks'];
+                                $tottal_obtained = $tottal_obtained + $std_row['marks_obtained'];
                             }   
-                            $message .= 'Please collect marksheet from office <br />';
+                            $tottal_percentage = $tottal_obtained / $tottal_marks * 100;
+                            $message .= "<br />";
+                            $message .= "Total Marks: ".$tottal_marks."<br />";
+                            $message .= "Obtained Marks: ".$tottal_obtained."<br />";
+                            $message .= "Percentage: ".round($tottal_percentage, 2)."%<br />";
+                            $message .= "Grade: ".Yii::$app->common->getLegends(round($tottal_percentage, 2))."<br />";
                         }
                         
                         array_push($std_ids, $students['stu_id']);

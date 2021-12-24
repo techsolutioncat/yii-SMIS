@@ -156,49 +156,49 @@ $(function () {
 
 });
 
-$(document).on('click','#get-timeline',function () {
-    var startDate    = $(this).data('sdate');
-    var endDate      = $(this).data('edate');
-    var stdId        = $(this).data('std');
-    var classId      = $(this).data('class_id');
-    var groupId      = $(this).data('group_id');
-    var sectionId    = $(this).data('section_id');
-    var url          = $(this).data('url');
+// $(document).on('click','#get-timeline',function () {
+//     var startDate    = $(this).data('sdate');
+//     var endDate      = $(this).data('edate');
+//     var stdId        = $(this).data('std');
+//     var classId      = $(this).data('class_id');
+//     var groupId      = $(this).data('group_id');
+//     var sectionId    = $(this).data('section_id');
+//     var url          = $(this).data('url');
 
-    $('a#get-timeline').removeClass('active');
-    $(this).addClass('active');
-    //console.log(startDate+"  "+endDate+"  "+stdId+"  "+classId+"  "+groupId+"  "+sectionId+"  "+url);
-    $.ajax
-    ({
-        type: "POST",
-        dataType :"JSON",
-        data:{start_date:endDate,end_date:startDate,student_id:stdId,class_id:classId,group_id:groupId,section_id:sectionId},
-        url: url,
-        cache: false,
-        success: function(html)
-        {
-            //  alert('success');
-            if(Object.keys(html.attenance_data).length > 0 ){
-                var chart = $('#container_attendance').highcharts();
+//     $('a#get-timeline').removeClass('active');
+//     $(this).addClass('active');
+//     //console.log(startDate+"  "+endDate+"  "+stdId+"  "+classId+"  "+groupId+"  "+sectionId+"  "+url);
+//     $.ajax
+//     ({
+//         type: "POST",
+//         dataType :"JSON",
+//         data:{start_date:endDate,end_date:startDate,student_id:stdId,class_id:classId,group_id:groupId,section_id:sectionId},
+//         url: url,
+//         cache: false,
+//         success: function(html)
+//         {
+//             //  alert('success');
+//             if(Object.keys(html.attenance_data).length > 0 ){
+//                 var chart = $('#container_attendance').highcharts();
 
-                var data =[];
+//                 var data =[];
 
-                $.each(html.attenance_data.total,
-                    function(key,value) {
-                       data.push(parseInt(value));
-                    });
-                chart.series[0].setData(data);
-            }
-            else{
+//                 $.each(html.attenance_data.total,
+//                     function(key,value) {
+//                        data.push(parseInt(value));
+//                     });
+//                 chart.series[0].setData(data);
+//             }
+//             else{
 
-                var chart = $('#container_attendance').highcharts();
-                if(chart != undefined){
-                    chart.series[0].setData([' ',0]);
-                }
+//                 var chart = $('#container_attendance').highcharts();
+//                 if(chart != undefined){
+//                     chart.series[0].setData([' ',0]);
+//                 }
 
-            }
+//             }
 
-            $(".floorAjax").html(html);
-        }
-    });
-});
+//             $(".floorAjax").html(html);
+//         }
+//     });
+// });

@@ -87,8 +87,10 @@ if(Yii::$app->request->get('ch_id')) {
                                 $s_date = date('Y-m-d',strtotime($items['promoted_date']));
                                 $e_date = $end_date;
                                 ?>
-
-                                <a id="get-timeline" class="<?=($total_items==$counter)?'active':''?>" href="javascript:void(0);" data-sdate="<?=$s_date?>" data-edate="<?=$e_date?>" data-std="<?=$studentInfo->stu_id?>" data-class_id="<?=$items['old_class']?>" data-group_id="<?=$items['old_group']?>" data-section_id="<?=$items['old_section']?>" data-url="<?=Url::to('get-profile-stats')?>">
+                                <?php /*
+                                <!-- <a id="get-timeline" class="<?=($total_items==$counter)?'active':''?>" href="javascript:void(0);" data-sdate="<?=$s_date?>" data-edate="<?=$e_date?>" data-std="<?=$studentInfo->stu_id?>" data-class_id="<?=$items['old_class']?>" data-group_id="<?=$items['old_group']?>" data-section_id="<?=$items['old_section']?>" data-url="<?=Url::to('get-profile-stats')?>"> -->
+                                */?>
+                                <a id="get-timeline" class="<?=($key==$active_key)?'active':''?>" href="<?php echo Url::to('get-profile-stats-by-id').'?data-sdate='.$s_date.'&data-edate='.$e_date.'&data-std='.$studentInfo->stu_id.'&data-class_id='.$items['old_class'].'&data-group_id='.$items['old_group'].'&data-section_id='.$items['old_section'].'&active_key='.$key ?>" data-url="<?=Url::to('get-profile-stats')?>">
                                     <div class="st_class">
                                         <p><?=str_replace(' ','<br/>',$items['class_name'])?></p>
                                         <span><?=date('Y',strtotime($items['promoted_date']))?></span>
@@ -452,8 +454,9 @@ if(Yii::$app->request->get('ch_id')) {
                                 <li><a href="#free-plan">Fee Plan</a></li>
                                 <?php
                                     if(Yii::$app->user->identity->fk_role_id != 3) {
+                                        $get_id = (isset($_GET["id"]))? $_GET["id"]: $student_id;
                                         ?>
-                                        <li class="pull-right"><?php echo Html::a('Update', ['update', 'id' => $_GET["id"]], ['class' => 'btn green-btn pull-right']); ?></li>
+                                        <li class="pull-right"><?php echo Html::a('Update', ['update', 'id' => $get_id], ['class' => 'btn green-btn pull-right']); ?></li>
                                         <?php
                                     }
                                 ?>
@@ -591,7 +594,8 @@ if(Yii::$app->request->get('ch_id')) {
                         <div class="st_widget shade result_calender">
                             <img src="<?= Url::to('@web/img/calender-1.svg') ?>" alt="MIS">
                         </div>
-                        <?php $sms_communication=SmsLog::find()->where(['fk_user_id'=>$_GET['id'],'fk_branch_id'=>yii::$app->common->getBranch()])->all();
+                        <?php $get_id = (isset($_GET["id"]))? $_GET["id"]: $student_id; ?>
+                        <?php $sms_communication=SmsLog::find()->where(['fk_user_id'=>$get_id,'fk_branch_id'=>yii::$app->common->getBranch()])->all();
                         $count=0;
                         ?>
                         <div class="panel-group sms_log shade sms-logs" id="sms-logs">

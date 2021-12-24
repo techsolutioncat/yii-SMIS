@@ -3339,13 +3339,17 @@ $(document).on('click','#sendsmsWholeschools',function(){
     $(".loading").css("display", "block");
     $.ajax({
         type: "POST",
+        dataType: "json",
         data: {textarea:textarea},
         url: getUrl,
-        success: function(success){
-            if(success){
+        success: function(arg){
+            console.log(arg);
+            // if(num){
                 $(".loading").hide();
-                window.location.href=$('#redirect_url').val();
-            }
+                $("#msg_modal .modal-boday").html('<p>Conguratulation ! <b>'+arg.messages+'</b> messages successfully sent.<p>');
+                $("#msg_modal").modal();
+                // window.location.href=$('#redirect_url').val();
+            // }
         }
     });
 });

@@ -641,21 +641,24 @@ class AnalysisController extends Controller
         $stuQuery=yii::$app->db->createCommand("
             SELECT `student_info`.`stu_id` AS `stu_id`, `student_info`.`user_id` AS `user_id`, `student_info`.`contact_no` AS `contact`, `student_parents_info`.`contact_no` AS `p_contact` FROM `student_info` INNER JOIN `student_parents_info` ON student_parents_info.stu_id = student_info.stu_id WHERE (`student_info`.`fk_branch_id`=".yii::$app->common->getBranch().") AND (`student_info`.`is_active`=1)
             ")->queryAll();
-        
+        $num = 0;
         if(!empty($stuQuery)) {
             foreach ($stuQuery as $query){
                 $stu_id= $query['stu_id'];
                 
                 if($query['contact'] != "") {
                     Yii::$app->common->SendSms($query['contact'], $textArea, $stu_id);
+                    $num ++;
                 }
 
                 if($query['p_contact'] != "") {
                     Yii::$app->common->SendSms($query['p_contact'], $textArea, $stu_id);
+                    $num ++;
                 }
             }   
         }    
 
-        echo true;
+        echo json_encode(['memebers' => count($stuQuery), 'messages' => $num]);
+        exit;
     } //end of function
 } // end of class

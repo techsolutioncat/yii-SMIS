@@ -274,3 +274,24 @@ if(Yii::$app->user->identity->fk_role_id != 3) {
     </div>
 </div>
 
+ <!-- Modal -->
+ <div class="modal fade" id="msg_modal" role="dialog" data-backdrop="static" tabindex="-1">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-boday" style="padding: 43px;font-size: 21px;color: green;">
+
+            </div>
+            <div class="modal-footer">
+                <a type="button" class="btn btn-default" href="<?php echo Url::to('site') ?>">Close</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.success::before {
+    content: '' !important;
+    margin-top: -17px;
+}
+</style>

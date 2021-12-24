@@ -298,7 +298,7 @@ class FeeController extends Controller
                             $fee_head_ids = array_keys($post_data['transaction_head_arrears_amount']);
                             $message = '';
                             if(!empty($fee_head_ids)){
-                                $message .= 'name: '.$post_data['std_name']."<br />";
+                                $message .= 'Name: '.$post_data['std_name']."<br />";
                                 foreach ($fee_head_ids as $id) {
                                     $row = yii::$app->db->createCommand("SELECT title FROM fee_heads WHERE id = ".$id)->queryOne();
                                     $message .= $row['title'].': '.'Rs.'.$post_data['transaction_head_amount'][$id]."<br />";
@@ -313,23 +313,10 @@ class FeeController extends Controller
                                 $studentId = $student_row_data['stud_id'];
                                 $smsModel = new SmsLog();
                                 $getparentcontact = StudentParentsInfo::find()->select('contact_no')->where(['stu_id' => $studentId])->one();
-                                
-                                if(!isset($getparentcontact->contact_no) || !$getparentcontact->contact_no){
-                                    if(!$success){
-                                        Yii::$app->session->setFlash('error', 'There is no parent contact phone number.');
-                                        $this->redirect(['fee/index']);
-                                        exit;
-                                    }
-                                }
                                 $sendParentContact = $getparentcontact->contact_no;
                                 $success = Yii::$app->common->SendSms($sendParentContact, $message, $studentId);
                             }
                             // ============END SEND MESSAGE TO STUDENTS PARENTS =========================//
-                            if(!$success){
-                                Yii::$app->session->setFlash('error', 'Transaction error');
-                                $this->redirect(['fee/index']);
-                                exit;
-                            }
 
                             $new_opening_balance        = $old_opening_bal - $feeTranscModel->transaction_amount;
                             $new_transection_amt        = $old_transectionamt+$feeTranscModel->transaction_amount;

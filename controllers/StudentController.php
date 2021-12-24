@@ -2141,6 +2141,7 @@ class StudentController extends Controller {
                                     ->select(['fk_chalan_id'])
                                     ->where(['fk_branch_id' => Yii::$app->common->getBranch(), 'fk_stu_id' => $student_id])
                                     ->andWhere(['between', 'date(created_date)', $start_date, date('Y-m-d')])->groupBy(['fk_chalan_id'])->all();
+                                    
                     if (count($payment_received) > 0) {
 
 
@@ -2169,7 +2170,6 @@ class StudentController extends Controller {
                         ['name' => "Total Received", 'data' => $total_payment_received],
                         ['name' => "Total Arrears", 'data' => $arrears]
                     ];
-
                     return $this->render('profile', [
                                 'model' => $model,
                                 'studentInfo' => $studentInfo,
@@ -2182,6 +2182,7 @@ class StudentController extends Controller {
                                 'start_date' => $start_date,
                                 'end_date' => date('Y-m-d'),
                                 'pi_array_fee' => $pi_array_fee,
+                                'active_key' => 0,
                                 'exam_array' => $exam_array
                     ]);
                 }
@@ -2319,7 +2320,7 @@ class StudentController extends Controller {
                     /* student Attendance */
                     $attendance_query = StudentAttendance::find()->select(['count(*) as total', 'leave_type'])
                             ->where(['fk_stu_id' => $data['student_id']])
-                            ->andWhere(['between', 'date(date)', $data['start_date'], $data['end_date']])
+                            ->andWhere(['between', 'date', $data['start_date'], $data['end_date']])
                             ->groupBy('leave_type')
                             ->asArray()
                             ->all();
@@ -2756,5 +2757,174 @@ class StudentController extends Controller {
             ]
         );
     }
+
+    public function actionGetProfileStatsById() {
+        $model = new StudentInfo();
+        $student_id = yii::$app->request->get('data-std');
+        $get_data = yii::$app->request->get();
+        $studentInfo = Yii::$app->common->getStudent($student_id);
+        $total_time_line = [];
+        /* student timeline  query */
+        $Stdtimeline = \app\models\StuRegLogAssociation::find()
+                ->select([
+                    'rc.title class_name',
+                    'rg.title group_name',
+                    'rs.title section_name',
+                    'stu_reg_log_association.current_class_id old_class',
+                    'stu_reg_log_association.current_group_id old_group',
+                    'stu_reg_log_association.current_section_id old_section',
+                    'stu_reg_log_association.promoted_date',
+                ])
+                ->innerJoin('ref_class rc', 'rc.class_id=stu_reg_log_association.current_class_id')
+                ->leftJoin('ref_group rg', 'rg.group_id=stu_reg_log_association.current_group_id')
+                ->leftJoin('ref_section rs', 'rs.section_id=stu_reg_log_association.current_section_id')
+                ->where(['stu_reg_log_association.fk_stu_id' => $student_id])
+                // ->orderBy(['stu_reg_log_association.id'=>SORT_DESC])
+                ->asArray()
+                ->all();
+        $existing_class[] = [
+            'class_name' => $studentInfo->class->title,
+            'group_name' => ($studentInfo->group_id) ? $studentInfo->group->title : '',
+            'section_name' => $studentInfo->section->title,
+            'old_class' => $studentInfo->class_id,
+            'old_group' => ($studentInfo->group_id) ? $studentInfo->group_id : null,
+            'old_section' => $studentInfo->section_id,
+            'promoted_date' => date('Y-m-d'),
+        ];
+        if (count($Stdtimeline) > 0) {
+            $last_pointer = count($Stdtimeline) - 1;
+            $start_date = date('Y-m-d', strtotime($studentInfo->registration_date));
+            $total_time_line = array_merge($Stdtimeline, $existing_class);
+        } else {
+            $start_date = date('Y-m-d', strtotime($studentInfo->registration_date));
+            $total_time_line = $existing_class;
+        }
+        /* get exams. */
+        $query = Exam::find()
+                        ->select(['exam.fk_exam_type id', 'et.type title'])
+                        ->innerJoin('exam_type et', 'et.id=exam.fk_exam_type')
+                        ->where([
+                            'exam.fk_branch_id' => Yii::$app->common->getBranch(),
+                            'exam.fk_class_id' => $get_data['data-class_id'],
+                            'exam.fk_group_id' => ($get_data['data-group_id']) ? $get_data['data-group_id'] : null,
+                            'exam.fk_section_id' => $get_data['data-section_id']
+                        ])
+                        ->groupBy('fk_exam_type')
+                        ->asArray()->all();
+
+        $exam_array = \yii\helpers\ArrayHelper::map($query, 'id', 'title');
+
+        /* student Attendance */
+        $attendance_query = StudentAttendance::find()->select(['count(*) as total', 'leave_type'])
+                        ->where(['fk_stu_id' => $student_id])
+                        ->andWhere(['between', 'date', $start_date, date('Y-m-d H:i:s')])
+                        ->groupBy('leave_type')->asArray()->all();
+        /* FEE DATA COLLECTION */
+        $std_plan_type = $studentInfo->fk_fee_plan_type;
+        $class_id =  $get_data['data-class_id'];
+        $group_id = $get_data['data-group_id'];
+        $section_id = $get_data['data-section_id'];
+        $stop_id = $studentInfo->fk_stop_id;
+        $is_hostel_avail = $studentInfo->is_hostel_avail;
+        $sum_total = 0;
+        $total_payment_received = 0;
+        $total_payment_arrears = 0;
+
+        $transport_fare = 0;
+        $hostel_fare = 0;
+
+        $fee_plan_Model = FeePlanType::findOne($std_plan_type);
+        if (!empty($stop_id)) {
+            $stopModel = Stop::findOne($stop_id);
+            $transport_fare = $stopModel->fare;
+        }
+        if ($is_hostel_avail) {
+            $hostelDetail = HostelDetail::find()
+                            ->select('h.amount amount')
+                            ->innerJoin('hostel h', 'h.id=hostel_detail.fk_hostel_id')
+                            ->where(['hostel_detail.fk_branch_id' => Yii::$app->common->getBranch(), 'hostel_detail.fk_student_id' => $studentInfo->stu_id])->asArray()->one();
+            $hostel_fare = $hostelDetail['amount'];
+        }
+        $query_fee = FeeHeads::find()->select([
+                            'fpm.time_span as no_months',
+                            'fee_heads.id as head_id',
+                            'fee_heads.title',
+                            'fee_heads.promotion_head',
+                            'fee_heads.discount_head_status as discount_head_status',
+                            'fee_heads.one_time_only as one_time',
+                            'fee_heads.description',
+                            'fg.amount', 'fg.is_active',
+                            'rc.title as class',
+                            'rg.title as group'
+                        ])
+                        ->innerJoin('fee_payment_mode fpm', 'fpm.id=fee_heads.fk_fee_method_id')
+                        ->leftJoin('fee_group fg', 'fg.fk_fee_head_id=fee_heads.id')
+                        ->innerJoin('ref_class rc', 'rc.class_id=fg.fk_class_id')
+                        ->leftJoin('ref_group rg', 'rg.group_id=fg.fk_group_id')
+                        ->where(['fg.is_active' => 'yes', 'rc.class_id' => $class_id, 'rg.group_id' => ($group_id) ? $group_id : null])->asArray()->all();
+        foreach ($query_fee as $items) {
+            if ($items['no_months'] == 1) {
+                $amount = $items['amount'] * $items['no_months'];
+            } else {
+                $amount = $items['amount'] * $items['no_months'] / 12;
+            }
+            ///echo $amount."<br/>";
+            $sum_total = $sum_total + $amount;
+        }
+
+        $total_months_amount = $sum_total * 12;
+
+
+        /* fee paid  by student graph */
+        $payment_received = FeeHeadWise::find()
+                        ->select(['fk_chalan_id'])
+                        ->where(['fk_branch_id' => Yii::$app->common->getBranch(), 'fk_stu_id' => $student_id])
+                        ->andWhere(['between', 'date(created_date)', $start_date, date('Y-m-d')])->groupBy(['fk_chalan_id'])->all();
+        if (count($payment_received) > 0) {
+
+
+            foreach ($payment_received as $challan_id) {
+                $payment_received = FeeHeadWise::find()
+                        ->where(['fk_chalan_id' => $challan_id])
+                        ->sum('payment_received');
+                $total_payment_received = $total_payment_received + $payment_received;
+
+                /* fee remaing graph */
+                $payment_arrears = FeeChallanRecord::find()
+                        ->where(['challan_id' => $challan_id])
+                        ->sum('head_amount');
+                $total_payment_arrears = $total_payment_arrears + $payment_arrears;
+            }
+        }
+        if ($total_payment_arrears > 0) {
+            $arrears = $total_payment_arrears - $total_payment_received;
+        } else {
+            $arrears = 0;
+        }
+
+        $total_Year_amount = $total_months_amount - $total_payment_received;
+        $pi_array_fee = [
+            ['name' => "Total Amount", 'data' => $total_Year_amount],
+            ['name' => "Total Received", 'data' => $total_payment_received],
+            ['name' => "Total Arrears", 'data' => $arrears]
+        ];
+        return $this->render('profile', [
+                    'model' => $model,
+                    'studentInfo' => $studentInfo,
+                    'fee_query' => $query_fee,
+                    'fee_plan_Model' => $fee_plan_Model,
+                    'transport_fare' => $transport_fare,
+                    'hostel_fare' => $hostel_fare,
+                    'attendance_array' => $attendance_query,
+                    'total_time_line' => $total_time_line,
+                    'start_date' => $start_date,
+                    'end_date' => date('Y-m-d'),
+                    'pi_array_fee' => $pi_array_fee,
+                    'exam_array' => $exam_array,
+                    'active_key' => $get_data['active_key'],
+                    'student_id' => $student_id
+        ]);
+    }
+
 }
 // end of main class
