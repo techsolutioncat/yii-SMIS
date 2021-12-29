@@ -664,6 +664,13 @@ foreach ($attendance_array as $key=>$attendance_details){
     $attenance_data['total'][]= $attendance_details['total'];
 
 }
+// $fee_array = array();
+// foreach ($fee_query as $items){
+//     $tmp = array();
+//     $tmp['name'] = $items['title'];
+//     $tmp['data'] = $items['amount'];
+//     array_push($fee_array, $tmp);
+// }
 $this->registerJS("$('ul.exams-list li a').last()[0].click();", \yii\web\View::POS_LOAD);
 $this->registerJS(" 
     var attendance_details = ".json_encode($attenance_data,JSON_NUMERIC_CHECK).";

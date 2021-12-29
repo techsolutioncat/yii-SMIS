@@ -82,8 +82,10 @@ $(function () {
         var temp = new Array(name[j],data[j]);
         dataArrayFinal[j] = temp;
     }
-    console.log(FeePiData);
+
     Highcharts.chart('container_fee_chart', {
+        colors: ['#058DC7', '#50B432', '#ED561B', '#DDDF00', '#24CBE5', '#64E572',
+        '#FF9655', '#FFF263', '#6AF9C4'],
         chart: {
             plotBackgroundColor: null,
             plotBorderWidth: null,
