@@ -60,7 +60,7 @@ if(Yii::$app->user->identity->fk_role_id != 3) {
                             </div>
                             <div class="wed-head" style="min-height: 0px;padding-bottom: 25px;padding-top: 0px;">
                                 <a href="javascript:void(0);" id="sms_record_link" data-number="<?php echo $log_num;?>">
-                                    <?php echo Url::to(['analysis/send-whole-school']) ?>
+                                    Total Messages sent in <?php echo date('Y-m');?> are <?php echo $log_num;?>
                                 </a>
                             </div>
                             <?php 

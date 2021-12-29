@@ -1883,6 +1883,7 @@ class StudentController extends Controller {
             if (Yii::$app->request->isAjax) {
                 $model = new StudentInfo();
                 $data = Yii::$app->request->post();
+                
                 if (Yii::$app->request->post()) {
                     if ($data['section_id']) {
                         $class_id = $data['class_id'];
@@ -2079,7 +2080,6 @@ class StudentController extends Controller {
                                     ->andWhere(['between', 'date', $start_date, date('Y-m-d H:i:s')])
                                     ->groupBy('leave_type')->asArray()->all();
 
-
                     /* FEE DATA COLLECTION */
                     $std_plan_type = $studentInfo->fk_fee_plan_type;
                     $class_id = $studentInfo->class_id;
@@ -2230,7 +2230,7 @@ class StudentController extends Controller {
                                 ->innerJoin('user u', 'u.id=st.user_id')
                                 ->where(['exam.fk_branch_id' => Yii::$app->common->getBranch(), 'c.class_id' => $class, 'g.group_id' => ($data['groupid']) ? $data['groupid'] : null, 's.section_id' => $sectionid, 'st.stu_id' => $stdid, 'et.id' => $examId])
                                 ->groupBy(['st.stu_id', 'c.class_id', 'c.title', 'g.group_id', 'g.title', 's.section_id', 's.title', 'sb.title'])->asArray()->all();
-
+                
                 $pichart_arr = [];
                 foreach ($subjects_data as $kay => $sub_data) {
                     $pichart_arr[] = [$sub_data['subject'], $sub_data['marks_obtained']];
@@ -2239,7 +2239,7 @@ class StudentController extends Controller {
                 $html = $this->renderAjax('profile-exam', [
                     'subjects_data' => $subjects_data
                 ]);
-
+                
                 return json_encode(['status' => 1, 'details' => $html, 'examdivid' => $examdivid, 'piExamArr' => $pichart_arr], JSON_NUMERIC_CHECK);
             }
         }
@@ -2260,7 +2260,6 @@ class StudentController extends Controller {
                 $new_cid = $data['new_cid'];
                 $new_gid = $data['new_gid'];
                 $new_sid = $data['new_sid'];
-
                 /* promote individual studen loop */
                 foreach ($selected_students as $key => $student_id) {
                     $StdRegLogAssoc = new StuRegLogAssociation();
@@ -2286,7 +2285,6 @@ class StudentController extends Controller {
                             }
                         }
                     }
-
                     /* new entery to std reg log */
                     $StdRegLogAssoc->fk_stu_id = $student_id;
                     $StdRegLogAssoc->fk_class_id = $new_cid;
@@ -2476,7 +2474,7 @@ class StudentController extends Controller {
     public function actionShuffleStudents() {
         if (Yii::$app->user->isGuest) {
             return $this->redirect(['site/login']);
-        } else {
+        }else{
             $model = new StudentInfo();
             /*
              *   Process for non-ajax request
@@ -2908,6 +2906,12 @@ class StudentController extends Controller {
             ['name' => "Total Received", 'data' => $total_payment_received],
             ['name' => "Total Arrears", 'data' => $arrears]
         ];
+        
+        $studentInfo['stu_id'] = yii::$app->request->get('data-std');
+        $studentInfo['class_id'] = yii::$app->request->get('data-class_id');
+        $studentInfo['group_id'] = yii::$app->request->get('data-group_id');
+        $studentInfo['section_id'] =  yii::$app->request->get('data-section_id');
+
         return $this->render('profile', [
                     'model' => $model,
                     'studentInfo' => $studentInfo,

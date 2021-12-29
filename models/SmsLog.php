@@ -37,7 +37,7 @@ class SmsLog extends \yii\db\ActiveRecord
             [['fk_user_id', 'sent_date_time', 'fk_branch_id'], 'required'],
             [['fk_user_id', 'fk_branch_id'], 'integer'],
             [['sent_date_time'], 'safe'],
-            [['SMS_body'], 'string', 'max' => 500],
+            [['SMS_body'], 'string', 'max' => 1000],
             [['sms_title', 'receiver_no'], 'string', 'max' => 20],
             [['status'], 'string', 'max' => 255],
             [['fk_branch_id'], 'exist', 'skipOnError' => true, 'targetClass' => Branch::className(), 'targetAttribute' => ['fk_branch_id' => 'id']],

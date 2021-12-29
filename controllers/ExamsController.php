@@ -1290,25 +1290,24 @@ class ExamsController extends Controller
                         $tottal_percentage = 0.00;
                         if(count($subjects_data)>0){
                             foreach ($subjects_data as $std_row) {
-                                $message .= 'Your child "'.$subjects_data[0]['student_name']. '" ';
-                                $message .= ' has obtained marks "'.$std_row['marks_obtained'].'" out of "'.$std_row['total_marks'].'" in Examination "'.$std_row['subject'].'" ';
-                                $message .= 'Please collect marksheet from office. <br />';
+                                // $message .= 'Your child "'.$subjects_data[0]['student_name']. '" ';
+                                // $message .= ' has obtained marks "'.$std_row['marks_obtained'].'" out of "'.$std_row['total_marks'].'" in Examination "'.$std_row['subject'].'" ';
+                                // $message .= 'Please collect marksheet from office. <br />';
                                 $tottal_marks = $tottal_marks + $std_row['total_marks'];
                                 $tottal_obtained = $tottal_obtained + $std_row['marks_obtained'];
                             }   
                             $tottal_percentage = $tottal_obtained / $tottal_marks * 100;
-                            $message .= "<br />";
-                            $message .= "Total Marks: ".$tottal_marks."<br />";
-                            $message .= "Obtained Marks: ".$tottal_obtained."<br />";
-                            $message .= "Percentage: ".round($tottal_percentage, 2)."%<br />";
-                            $message .= "Grade: ".Yii::$app->common->getLegends(round($tottal_percentage, 2))."<br />";
+
+                            $message .= "Your child ".$subjects_data[0]['student_name']." has obtained ".$tottal_obtained." mark out of  ".$tottal_marks." marks. His percentage is ".round($tottal_percentage, 2)."%";
+                            // $message .= "Total Marks: ".$tottal_marks."<br />";
+                            // $message .= "Obtained Marks: ".$tottal_obtained."<br />";
+                            // $message .= "Percentage: ".round($tottal_percentage, 2)."%<br />";
+                            // $message .= "Grade: ".Yii::$app->common->getLegends(round($tottal_percentage, 2))."<br />";
                         }
-                        
                         array_push($std_ids, $students['stu_id']);
                         if($student['contact_no'] != "") {
                             $success = Yii::$app->common->SendSms($student['contact_no'], $message, $students['stu_id']);
                         }
-
                         $getparentcontact = StudentParentsInfo::find()->select('contact_no')->where(['stu_id' => $students['stu_id']])->one();
                         $sendParentContact = $getparentcontact->contact_no;
                         if($sendParentContact != "") {
