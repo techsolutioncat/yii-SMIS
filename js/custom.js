@@ -26,6 +26,18 @@ $("#attendance-detail").click(function(){
 	$("#attendance-pop").toggle('blind');
 	$(".container-wrap").addClass("open"); 
 });
+
+//student Profile Fee
+$("#fee-detail").click(function(){
+	$("#student-fee-pop").toggle('blind');
+	$(".container-wrap").addClass("open"); 
+});
+
+$("#fee-close-detail").click(function(){
+	$("#student-fee-pop").toggle('blind');
+	$(".container-wrap").removeClass("open");  
+}); 
+
 $("#close-detail").click(function(){
 	$("#attendance-pop").toggle('blind');
 	$(".container-wrap").removeClass("open");  

@@ -2170,7 +2170,10 @@ class StudentController extends Controller {
                         ['name' => "Total Received", 'data' => $total_payment_received],
                         ['name' => "Total Arrears", 'data' => $arrears]
                     ];
+                    $getChalans=Yii::$app->db->createCommand("select fhw.fk_branch_id,fhw.fk_stu_id, ftd.challan_no,ftd.id,ftd.manual_recept_no,ftd.transaction_date as `fee_submission_date` from fee_head_wise fhw inner join fee_transaction_details ftd on ftd.id=fhw.fk_chalan_id where fhw.fk_stu_id=".$student_id." and fhw.fk_branch_id=".Yii::$app->common->getBranch()." GROUP BY fhw.fk_branch_id,ftd.id, ftd.challan_no, ftd.transaction_date")->queryAll();
+        
                     return $this->render('profile', [
+                                'getChalans' => $getChalans,
                                 'model' => $model,
                                 'studentInfo' => $studentInfo,
                                 'fee_query' => $query_fee,
@@ -2182,6 +2185,7 @@ class StudentController extends Controller {
                                 'start_date' => $start_date,
                                 'end_date' => date('Y-m-d'),
                                 'pi_array_fee' => $pi_array_fee,
+                                'student_id' => $student_id,
                                 'active_key' => 0,
                                 'exam_array' => $exam_array
                     ]);
@@ -2911,8 +2915,10 @@ class StudentController extends Controller {
         $studentInfo['class_id'] = yii::$app->request->get('data-class_id');
         $studentInfo['group_id'] = yii::$app->request->get('data-group_id');
         $studentInfo['section_id'] =  yii::$app->request->get('data-section_id');
-
+        $getChalans=Yii::$app->db->createCommand("select fhw.fk_branch_id,fhw.fk_stu_id, ftd.challan_no,ftd.id,ftd.manual_recept_no,ftd.transaction_date as `fee_submission_date` from fee_head_wise fhw inner join fee_transaction_details ftd on ftd.id=fhw.fk_chalan_id where fhw.fk_stu_id=".$student_id." and fhw.fk_branch_id=".Yii::$app->common->getBranch()." GROUP BY fhw.fk_branch_id,ftd.id, ftd.challan_no, ftd.transaction_date")->queryAll();
+        
         return $this->render('profile', [
+                    'getChalans'=>$getChalans,
                     'model' => $model,
                     'studentInfo' => $studentInfo,
                     'fee_query' => $query_fee,
