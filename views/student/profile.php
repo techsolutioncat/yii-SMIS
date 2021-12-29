@@ -309,11 +309,11 @@ if(Yii::$app->request->get('ch_id')) {
 
 
                                                     ?>
-                                                    <tr>
+                                                    <tr class="tr-fee-plan">
                                                         <td class="fst_center"><?=$i?></td>
                                                         <td><?=$items['title']?></td>
                                                         <td>
-                                                            <span class="pull-left currency-head"> Rs. <?=round($totalHeadAmt_without_currency, 0)?></span>
+                                                            <span class="pull-left currency-head"> Rs. </span><span class="fee-amount pull-left currency-head"><?=round($totalHeadAmt_without_currency, 0)?></span>
                                                             <?php
                                                             /*if there's any head discount.*/
                                                             if(count($discountAmount) > 0 ){

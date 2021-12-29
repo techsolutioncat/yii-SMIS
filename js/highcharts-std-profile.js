@@ -57,8 +57,19 @@ $(function () {
         var chart = new  Highcharts.chart('container_attendance', attendanceOptions);
     }
 
+    var FeeArray = new Array();
+    // var totalAmount = 0.00;
+    $('#table-new-std-challan table tbody tr.tr-fee-plan').each(function() {
+        var tmp = new Array();
+        var heads = $(this).find('td:nth-child(2)').text();
+        var amount = $(this).find('td:nth-child(3) span.fee-amount').text();
+        tmp = {'name' : heads, 'data':  parseFloat(amount)};
+        // totalAmount += parseFloat(amount);
+        FeeArray.push(tmp);
+    });
 
-    var d = FeePiData;
+    // var d = FeePiData;
+    var d = FeeArray;
     var name = Array();
     var data = Array();
     var dataArrayFinal = Array();
@@ -71,7 +82,7 @@ $(function () {
         var temp = new Array(name[j],data[j]);
         dataArrayFinal[j] = temp;
     }
-
+    console.log(FeePiData);
     Highcharts.chart('container_fee_chart', {
         chart: {
             plotBackgroundColor: null,
