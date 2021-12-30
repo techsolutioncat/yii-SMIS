@@ -233,7 +233,6 @@ class FeeController extends Controller
                             's.fare'
                         ])
                         ->asArray()->all();
-
                     $html = $this->renderAjax('challan-details-form',
                         [
                             'query_std_plan'                => $query_std_plan,
@@ -299,15 +298,20 @@ class FeeController extends Controller
                             $message = '';
                             if(!empty($fee_head_ids)){
                                 $message .= 'Name: '.$post_data['std_name']."<br />";
+                                $total_arrears = 0;
                                 foreach ($fee_head_ids as $id) {
                                     $row = yii::$app->db->createCommand("SELECT title FROM fee_heads WHERE id = ".$id)->queryOne();
-                                    $message .= $row['title'].': '.'Rs.'.$post_data['transaction_head_amount'][$id]."<br />";
+                                    $message .= $row['title'].': '.'Rs.'.$post_data['transaction_head_amount'][$id].",&nbsp&nbsp&nbsp";
+                                    $message .= 'Arrears: '.'Rs.'.$post_data['transaction_head_arrears_amount'][$id]."<br />";
+                                    $total_arrears = $total_arrears + $post_data['transaction_head_arrears_amount'][$id];
                                 }
                                 $message .= '-------------------------------<br />';
                                 $message .= 'Pay Amount: Rs.'.$post_data['FeeTransactionDetails']['transaction_amount']."<br />";
+                                $message .= 'Total Arrears: Rs.'.$total_arrears."<br />";
                                 $message .= '-------------------------------<br />';
-                                $message .= 'Manual Receipt #: '.$post_data['FeeTransactionDetails']['manual_recept_no']."<br />";
-                                $message .= 'Transaction Date: '.$post_data['FeeTransactionDetails']['transaction_date'];
+                                // $message .= 'Manual Receipt #: '.$post_data['FeeTransactionDetails']['manual_recept_no']."<br />";
+                                $message .= 'Transaction Date: '.$post_data['FeeTransactionDetails']['transaction_date']."<br />";
+                                $message .= 'Challan #: '.$post_data['Challan'];
 
                                 $student_row_data = yii::$app->db->createCommand("SELECT stud_id FROM fee_transaction_details WHERE id = ".$post_data['FeeTransactionDetails']['id'])->queryOne();
                                 $studentId = $student_row_data['stud_id'];

@@ -24,6 +24,7 @@ use app\models\FeeChallanRecord;
             ?>
             <div class="table-responsive">
                 <input type="hidden" name="std_name" value="<?=ucfirst($query_std_plan['name'])?>">
+                <input type="hidden" name="Challan" value="<?=ucfirst($feeTranscModel['challan_no'])?>">
                 <table class="table table-striped">
                     <thead>
                     <tr>

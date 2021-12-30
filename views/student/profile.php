@@ -555,16 +555,13 @@ if(Yii::$app->request->get('ch_id')) {
                                                  if($getChalan['id']){
                                                     $fee_challan_record = \app\models\FeeChallanRecord::find()->where(['fk_branch_id'=>Yii::$app->common->getBranch(),'challan_id'=>$getChalan['id']])->one();
                                                 }
-                                                $query = yii::$app->db->createCommand("
-                                                select fhw.id,fhw.fk_branch_id,fhw.fk_stu_id,fh.title,fhw.payment_received,fcr.arrears,fhw.transport_fare,fhw.hostel_fee from fee_head_wise fhw inner join fee_heads fh on fh.id=fhw.fk_fee_head_id inner join fee_transaction_details ftd on ftd.id=fhw.fk_chalan_id left join fee_challan_record fcr on fcr.challan_id=fhw.fk_chalan_id and fhw.fk_fee_head_id=fcr.fk_head_id where fhw.fk_stu_id=" . $student_id . " and fhw.fk_branch_id=" . Yii::$app->common->getBranch() . " and ftd.challan_no = '" . $getChalan['challan_no'] . "'
-                                                ")->queryAll();
-                                 
-                                                 $query_extrahead = yii::$app->db->createCommand("select fhw.id,fhw.fk_branch_id,fhw.fk_stu_id,fh.title,fhw.payment_received,fcr.arrears from fee_head_wise fhw  
-                                inner join fee_heads fh on fh.id=fhw.fk_fee_head_id 
-                                inner join fee_transaction_details ftd on ftd.id=fhw.fk_chalan_id 
-                                left join fee_challan_record fcr on fcr.challan_id=fhw.fk_chalan_id and fhw.fk_fee_head_id=fcr.fk_head_id 
-                                where fhw.fk_stu_id=" . $student_id . " and fhw.fk_branch_id=" . Yii::$app->common->getBranch() . " and fh.extra_head=1 and fhw.fk_fee_particular_id IS NULL and ftd.challan_no = '" . $getChalan['challan_no'] . "'")
-                                                     ->queryAll();
+                                                $query = yii::$app->db->createCommand("select fhw.id,fhw.fk_branch_id,fhw.fk_stu_id,fh.title,fhw.payment_received,fcr.arrears,fhw.transport_fare,fhw.hostel_fee from fee_head_wise fhw inner join fee_heads fh on fh.id=fhw.fk_fee_head_id inner join fee_transaction_details ftd on ftd.id=fhw.fk_chalan_id left join fee_challan_record fcr on fcr.challan_id=fhw.fk_chalan_id and fhw.fk_fee_head_id=fcr.fk_head_id where fhw.fk_stu_id=" . $student_id . " and fhw.fk_branch_id=" . Yii::$app->common->getBranch() . " and ftd.challan_no = '" . $getChalan['challan_no'] . "' and fh.created_date like '%".date('Y')."%'")->queryAll();
+                                                $query_extrahead = yii::$app->db->createCommand("select fhw.id,fhw.fk_branch_id,fhw.fk_stu_id,fh.title,fhw.payment_received,fcr.arrears from fee_head_wise fhw  
+                                                    inner join fee_heads fh on fh.id=fhw.fk_fee_head_id 
+                                                    inner join fee_transaction_details ftd on ftd.id=fhw.fk_chalan_id 
+                                                    left join fee_challan_record fcr on fcr.challan_id=fhw.fk_chalan_id and fhw.fk_fee_head_id=fcr.fk_head_id 
+                                                    where fhw.fk_stu_id=" . $student_id . " and fhw.fk_branch_id=" . Yii::$app->common->getBranch() . " and fh.extra_head=1 and fhw.fk_fee_particular_id IS NULL and ftd.challan_no = '" . $getChalan['challan_no'] . "' and fh.created_date like '%".date('Y')."%'")
+                                                    ->queryAll();
                                        ?>
                                         <table class="table table-striped">
                                             <thead>
@@ -693,8 +690,8 @@ if(Yii::$app->request->get('ch_id')) {
                                             <tr>
                                                 <th><?php echo $count + 1;?></th>
                                                 <td>Transport fare </td>
-                                                <th> Rs. <?php echo $queryy['transport_fare']; ?></th>
-                                                <th> <?php echo $queryy['transport_fare']; ?></th>
+                                                <th> Rs. <?php echo (isset($queryy))? $queryy['transport_fare']: '0'; ?></th>
+                                                <th> <?php echo (isset($queryy))? $queryy['transport_fare']: '0'; ?></th>
                                                 
                                             </tr>
 
@@ -732,8 +729,8 @@ if(Yii::$app->request->get('ch_id')) {
                                                     <th></th>
                                                     <th></th>
 
-                                                    <th style="color: green">Due: Rs. <?php echo $countgrand+$total_fareamount + $queryy['transport_fare']; ?></th>
-                                                    <th style="color: blue">Received: Rs. <?php echo $payrcvGrnd+$queryy['transport_fare']; ?></th>
+                                                    <th style="color: green">Due: Rs. <?php echo $countgrand+$total_fareamount + (isset($queryy))? $queryy['transport_fare']: 0; ?></th>
+                                                    <th style="color: blue">Received: Rs. <?php echo $payrcvGrnd+ (isset($queryy))? $queryy['transport_fare']: 0; ?></th>
                                                     <th style="color: red">Arears: Rs. <?php echo $arearscount; ?></th>
                                                 </tr>
                                                 </table>
