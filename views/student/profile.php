@@ -537,7 +537,7 @@ if(Yii::$app->request->get('ch_id')) {
                                 </div>
 
                                 <!-- Student Fee -->
-                                <div id="student-fee-pop" class="pop_fat" style="display:none;">
+                                <div id="student-fee-pop" class="pop_fat" style="display:none; top: -330px;">
                                     <div class="fad_close">
                                         <a id="fee-close-detail" href="javascript:void(0)" class="anc_btn">
                                             <img src="<?= Url::to('@web/img/close.svg') ?>" alt="MIS">
@@ -757,7 +757,7 @@ if(Yii::$app->request->get('ch_id')) {
                                     <p>Fee</p>
                                     <!--<img src="<?/*= Url::to('@web/img/g33.svg') */?>" alt="MIS">-->
                                     <div id="container_fee_chart" style="margin: 0 auto"></div>
-                                    <span class="pp_price">* Price in PKR</span>
+                                    <span class="pp_price">* PKR</span>
                                     <a id="fee-detail" href="javascript:void(0)" class="fa_detail">Details</a>
                                 </div>
                             </div>
