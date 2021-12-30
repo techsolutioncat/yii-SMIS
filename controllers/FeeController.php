@@ -306,11 +306,11 @@ class FeeController extends Controller
                                     $total_arrears = $total_arrears + $post_data['transaction_head_arrears_amount'][$id];
                                 }
                                 $message .= '-------------------------------<br />';
-                                $message .= 'Pay Amount: Rs.'.$post_data['FeeTransactionDetails']['transaction_amount']."<br />";
+                                $message .= 'Paid Amount: Rs.'.$post_data['FeeTransactionDetails']['transaction_amount']."<br />";
                                 $message .= 'Total Arrears: Rs.'.$total_arrears."<br />";
                                 $message .= '-------------------------------<br />';
                                 // $message .= 'Manual Receipt #: '.$post_data['FeeTransactionDetails']['manual_recept_no']."<br />";
-                                $message .= 'Transaction Date: '.$post_data['FeeTransactionDetails']['transaction_date']."<br />";
+                                $message .= 'Submission Date: '.$post_data['FeeTransactionDetails']['transaction_date']."<br />";
                                 $message .= 'Challan #: '.$post_data['Challan'];
 
                                 $student_row_data = yii::$app->db->createCommand("SELECT stud_id FROM fee_transaction_details WHERE id = ".$post_data['FeeTransactionDetails']['id'])->queryOne();
