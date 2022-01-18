@@ -231,6 +231,7 @@ if (!Yii::$app->user->isGuest) {
                                                     ['label' => '<span><img src="' . Url::to('@web/img/host2.svg') . '" /></span> ' . Yii::t('app', 'Assign Hostel'), 'url' => ['/hostel-detail ']],
                                                 ],
                                             ],
+                                            ['label' => '<img src="' . Url::to('@web/img/db_4.svg') . '" /> ' . Yii::t('app', 'expense'), 'url' => ['/expense']],
                                             Yii::$app->user->isGuest ? (
                                                     ['label' => '<img src="' . Url::to('@web/img/book-icon.png') . '" /> ' . Yii::t('app', 'Login'), 'url' => ['/site/login']]
                                                     ) : (

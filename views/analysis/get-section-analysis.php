@@ -33,7 +33,7 @@ use app\models\StudentParentsInfo;
              <input style=" margin-top: 7px;" type="submit" name="Generate Report" value="Generate Report" class="btn green-btn sectionpdf" data-url="<?=Url::to(['analysis/get-section-pdf']) ?>" />
              <input style=" margin-top: 7px; display: none" type="submit" name="Generate Report" value="Generate Report" class="btn green-btn examdetails" data-url="<?=Url::to(['analysis/get-exam-pdf']) ?>" />
 
-               <input style=" margin-top: 7px; display: none" type="submit" name="Generate Report" value="Generate Report" class="btn green-btn subjectsclas" data-url="<?=Url::to(['analysis/get-subject-pdf']) ?>" />
+               <input style=" margin-top: 7px; display: none" type="submit" name="Generate Report" value="Generate Report" class="btn green-btn subjectsclas" "<?=Url::to(['analysis/get-subject-pdf']) ?>" />
         </li>
     </ul>
 
